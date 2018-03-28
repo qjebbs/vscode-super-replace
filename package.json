@@ -1,0 +1,70 @@
+{
+    "name": "translator-advanced",
+    "displayName": "Translator Advanced",
+    "description": "Advanced tanslator which allows you translate precise ranges of text.",
+    "version": "0.0.1",
+    "publisher": "jebbs",
+    "engines": {
+        "vscode": "^1.21.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onCommand:translatorAdvanced.translateSelect",
+        "onCommand:translatorAdvanced.translateByRule"
+    ],
+    "main": "./out/src/extension",
+    "contributes": {
+        "commands": [
+            {
+                "command": "translatorAdvanced.translateSelect",
+                "title": "Translate Selected",
+                "icon":"Translator"
+            },
+            {
+                "command": "translatorAdvanced.translateByRule",
+                "title": "Advanced Translate...",
+                "icon":"Translator"
+            }
+        ],
+        "menus": {
+            "editor/context": [
+                {
+                    "when": "editorHasSelection",
+                    "command": "translatorAdvanced.translateSelect",
+                    "group": "translatorAdvanced"
+                }
+            ]
+        },
+        "configuration":[
+            {
+                "title": "Translator Advanced Configuration",
+                "properties": {
+                    "translatorAdvanced.googleApiKey":{
+                        "type":"string",
+                        "default":"",
+                        "description": "Type your google API key in order to make google translator to work",
+                        "scope": "window"
+                    }
+                }
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "tsc -p ./",
+        "compile": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "build": "node ./build.js"
+    },
+    "devDependencies": {
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.6",
+        "tslint": "^5.8.0",
+        "@types/node": "^7.0.43",
+        "@types/mocha": "^2.2.42"
+    },
+    "dependencies": {
+        "google-translate": "^2.1.0"
+    }
+}
