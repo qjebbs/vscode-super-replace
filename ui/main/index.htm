@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'nonce-3452342';">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+    <!-- <script nonce="3452342" src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script> -->
+
+    <script nonce="3452342" src="${extRoot}/ui/main/index.js"></script>
+</head>
+
+<body>
+    <div style="display:none;">
+        <a id="sendMsg" href=""></a>
+    </div>
+    <div class="container-fluid">
+        <form class="" action="a.htm">
+            <div class="form-group">
+                <h3>RegExp Reaplce Extended</h3>
+            </div>
+            <div id="inputFind" class="form-group">
+                <label for="textFind">Find</label>
+                <input type="text" class="form-control" id="textFind" name="textFind" required placeholder="Regular Expression of Find.">
+            </div>
+            <div id="inputReplace" class="form-group">
+                <label class="control-label" for="textReplace">Replace</label>
+                <input type="text" class="form-control" id="textReplace" name="textReplace" required placeholder="Replace Text. $0 for Submatch, $$0 for Processed Submatch">
+            </div>
+            <div class="form-group">
+                <label for="func">Processing Function</label>
+                <div class="form-group">
+                    <label class="radio-inline">
+                        <input type="radio" name="funcType" value="" checked> Normal Function
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="funcType" value="asnyc"> Async Function
+                    </label>
+                </div>
+                <div id="inputFunc" class="form-group">
+                    <textarea class="form-control" id="textFunc" name="textFunc" required rows="10"></textarea>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary" id="doReplace">Submit</button>
+        </form>
+    </div>
+</body>
+
+</html>

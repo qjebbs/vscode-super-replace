@@ -12,7 +12,8 @@
     ],
     "activationEvents": [
         "onCommand:translatorAdvanced.translateSelect",
-        "onCommand:translatorAdvanced.translateByRule"
+        "onCommand:translatorAdvanced.translateByRule",
+        "onCommand:translatorAdvanced.regexpReplaceExtented"
     ],
     "main": "./out/src/extension",
     "contributes": {
@@ -25,6 +26,11 @@
             {
                 "command": "translatorAdvanced.translateByRule",
                 "title": "Advanced Translate...",
+                "icon":"Translator"
+            },
+            {
+                "command": "translatorAdvanced.regexpReplaceExtented",
+                "title": "Advanced RegExp Replace...",
                 "icon":"Translator"
             }
         ],
