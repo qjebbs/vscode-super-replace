@@ -3,7 +3,9 @@ import { ITranslator, ITranslation, IDetectLanguageResult, ITranslateError } fro
 import { config } from "../common/config";
 
 class googleTranslator implements ITranslator {
-    private _translate = gt(config.googleApiKey);
+    get translator() {
+        return gt(config.googleApiKey);
+    }
     async translate(strings: string | string[], target: string, source?: string): Promise<ITranslation> {
         let detec: IDetectLanguageResult;
         if (!source) {
@@ -15,17 +17,20 @@ class googleTranslator implements ITranslator {
             source = detec.detections[0];
         }
         return new Promise<ITranslation>((resolve, reject) => {
-            this._translate.translate(strings, source, target, (err, translation) => {
+            this.translator.translate(strings, source, target, (err, translation) => {
+                let translations: string[] = undefined;
+                if (translation)
+                    translations = (translation instanceof Array ? translation : [translation]).map(t => t.translatedText)
                 resolve(<ITranslation>{
                     error: this.parseError(err),
-                    translations: (translation instanceof Array ? translation : [translation]).map(t => t.translatedText),
+                    translations: translations,
                 });
             });
         });
     }
     detectLanguage(strings: string | string[]): Promise<IDetectLanguageResult> {
         return new Promise<IDetectLanguageResult>((resolve, reject) => {
-            this._translate.detectLanguage(strings, (err, detections) => {
+            this.translator.detectLanguage(strings, (err, detections) => {
                 resolve(<IDetectLanguageResult>{
                     error: this.parseError(err),
                     detections: (detections instanceof Array ? detections : [detections]).map(d => d.language),
@@ -37,7 +42,11 @@ class googleTranslator implements ITranslator {
         if (!err) return undefined;
         let e;
         if (err.body) {
-            e = JSON.parse(err.body);
+            let tmp = JSON.parse(err.body);
+            e = {
+                code: tmp.error.code,
+                message: tmp.error.message
+            }
         } else if (err.error) {
             e = err.error;
         } else {
