@@ -1,4 +1,4 @@
-import { ReplaceConfig, IReplaceFillType } from "./interfaces";
+import { ReplaceConfig, IReplaceFillType, IFindMatches } from "./interfaces";
 import { IFindConfig } from "./interfaces";
 
 export function getFindConfig(find: string, texts: string[], replaceConfig: ReplaceConfig): IFindConfig {
@@ -11,20 +11,32 @@ export function getFindConfig(find: string, texts: string[], replaceConfig: Repl
     let maxIndex = Math.max(...indexes);
 
     let reg = new RegExp(find, "g");
-    let collectedFinds: RegExpExecArray[][] = [];
+    let collectedFinds: IFindMatches[] = [];
     for (let i = 0; i < texts.length; i++) {
-        let finds: RegExpExecArray[] = [];
         let text = texts[i];
+        let lineMatches: RegExpExecArray[] = [];
         let matches: RegExpExecArray;
+        let subs: string[] = [];
+        let pos = 0;
         while (matches = reg.exec(text)) {
-            finds.push(matches);
             if (maxIndex > matches.length - 1) {
                 throw new Error("Sub match index out of bound. Please Check your replace text!");
             }
+            lineMatches.push(matches);
             // collect needed sub matched to translate
             strings.push(...indexes.map(i => matches[i]));
+            subs.push(text.substr(pos, reg.lastIndex - matches[0].length - pos));
+            pos = reg.lastIndex;
         }
-        collectedFinds.push(finds);
+        if (pos >= text.length) {
+            subs.push("");
+        } else {
+            subs.push(text.substring(pos, text.length));
+        }
+        collectedFinds.push(<IFindMatches>{
+            matches: lineMatches,
+            restSubStrings: subs
+        });
     }
     return <IFindConfig>{
         collectedMatches: collectedFinds,

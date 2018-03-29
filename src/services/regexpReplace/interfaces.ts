@@ -1,7 +1,11 @@
+export interface IFindMatches {
+    matches: RegExpExecArray[];
+    restSubStrings: string[];
 
+}
 export interface IFindConfig {
-    collectedMatches: RegExpExecArray[][],
-    subMatchesToTransform: string[],
+    collectedMatches: IFindMatches[];
+    subMatchesToTransform: string[];
 }
 export enum IReplaceFillType {
     origin,
