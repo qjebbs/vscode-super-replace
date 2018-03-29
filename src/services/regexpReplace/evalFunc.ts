@@ -4,7 +4,7 @@ export function evalFunction(func: string) {
     return eval(func);
 }
 
-function gtranslte(source: string, target: string) {
+function gtranslate(source: string, target: string) {
     return async function (strings: string[]) {
         // for detection to be a array func.
         if (!strings.length) return [];
