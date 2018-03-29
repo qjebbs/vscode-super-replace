@@ -1,14 +1,11 @@
-import { ReplaceConfig, ReplaceFillType } from "./replace";
+import { ReplaceConfig, IReplaceFillType } from "./interfaces";
+import { IFindConfig } from "./interfaces";
 
-export interface FindConfig {
-    collectedMatches: RegExpExecArray[][],
-    subMatchesToTransform: string[],
-}
-export function getFindConfig(find: string, texts: string[], replaceConfig: ReplaceConfig): FindConfig {
+export function getFindConfig(find: string, texts: string[], replaceConfig: ReplaceConfig): IFindConfig {
     let strings: string[] = [];
     //find out indexes of sub matches need to translate
     let indexes = replaceConfig.indexes.reduce((p, c) => {
-        if (c.type == ReplaceFillType.translated) p.push(c.index);
+        if (c.type == IReplaceFillType.translated) p.push(c.index);
         return p;
     }, <number[]>[]);
     let maxIndex = Math.max(...indexes);
@@ -29,7 +26,7 @@ export function getFindConfig(find: string, texts: string[], replaceConfig: Repl
         }
         collectedFinds.push(finds);
     }
-    return <FindConfig>{
+    return <IFindConfig>{
         collectedMatches: collectedFinds,
         subMatchesToTransform: strings,
     }

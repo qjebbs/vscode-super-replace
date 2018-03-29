@@ -1,21 +1,8 @@
-export enum ReplaceFillType {
-    origin,
-    translated,
-}
-
-interface ReplaceIndex {
-    index: number;
-    type: ReplaceFillType;
-}
-
-export interface ReplaceConfig {
-    indexes: ReplaceIndex[];
-    restSubStrings: string[];
-}
+import { ReplaceConfig, IReplaceIndex, IReplaceFillType } from "./interfaces";
 
 export function getReplaceConfig(text: string): ReplaceConfig {
     let subs: string[] = [];
-    let indexes: ReplaceIndex[] = [];
+    let indexes: IReplaceIndex[] = [];
     let pos = 0;
     let stage = 0;
     for (let i = 0; i < text.length; i++) {
@@ -34,7 +21,7 @@ export function getReplaceConfig(text: string): ReplaceConfig {
                 subs.push(text.substring(pos, i - 1));
                 indexes.push({
                     index: Number(n),
-                    type: ReplaceFillType.origin
+                    type: IReplaceFillType.origin
                 });
                 i += n.length - 1;
                 pos = i + 1;
@@ -47,7 +34,7 @@ export function getReplaceConfig(text: string): ReplaceConfig {
                 subs.push(text.substring(pos, i - 2));
                 indexes.push({
                     index: Number(n),
-                    type: ReplaceFillType.translated
+                    type: IReplaceFillType.translated
                 });
                 i += n.length - 1;
                 pos = i + 1;
@@ -89,7 +76,7 @@ export function CalcReplace(replace: ReplaceConfig, matches: RegExpExecArray, tr
         throw new Error("子串与索引数量不合预期！");
     return replace.indexes.reduce((p, c, i) => {
         let fillText = "";
-        if (c.type == ReplaceFillType.origin) {
+        if (c.type == IReplaceFillType.origin) {
             fillText = matches[c.index];
         } else {
             fillText = translatedDict[matches[c.index]];
