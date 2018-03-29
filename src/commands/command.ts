@@ -16,7 +16,7 @@ export abstract class Command extends Disposable {
 
     private executeCatch(...args: any[]): any {
         try {
-            this.execute();
+            this.execute(...args);
         } catch (error) {
             showMessagePanel(error);
         }
