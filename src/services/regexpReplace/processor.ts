@@ -3,6 +3,7 @@ import { IProcessReulst } from "./interfaces";
 
 export async function makeProcessor(func: string): Promise<(strings: string[], ...args: string[]) => Promise<IProcessReulst>> {
     let f = evalFunction(func);
+    if (!(f instanceof Function)) return Promise.resolve(f);
     let test = await f([]);
     let isArrayFunc = test instanceof Array;
     return async function (strings: string[], ...args: string[]): Promise<IProcessReulst> {

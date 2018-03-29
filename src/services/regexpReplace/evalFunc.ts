@@ -1,7 +1,11 @@
 import { google } from "../translators/google";
 
 export function evalFunction(func: string) {
-    return eval(func);
+    try {
+        return eval(func);
+    } catch (error) {
+        return error.message;
+    }
 }
 
 function gtranslate(source: string, target: string) {
