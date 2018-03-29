@@ -22,3 +22,8 @@ export interface IProcessError {
     code: number,
     message: string,
 }
+
+export interface IProcessReulst {
+    processedDict: any,
+    error: IProcessError,
+}

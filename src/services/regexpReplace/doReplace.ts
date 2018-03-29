@@ -3,9 +3,12 @@ import * as vscode from 'vscode';
 import { getReplaceConfig, CalcReplace } from './replace';
 import { getFindConfig } from './find';
 import { RangeReplace, editTextDocument } from '../common/tools';
+import { IProcessReulst } from './interfaces';
 
 export async function doReplace(find: string, replace: string,
-    editor: vscode.TextEditor, processor: any, ...processorArgs: string[]) {
+    editor: vscode.TextEditor,
+    processor: (strings: string[], ...args: string[]) => Promise<IProcessReulst>,
+    ...processorArgs: string[]) {
     let document = editor.document;
     let lines = [...new Array(document.lineCount).keys()].map((_, i) => document.lineAt(i).text);
 
@@ -18,7 +21,7 @@ export async function doReplace(find: string, replace: string,
         vscode.window.showInformationMessage(trans.error.message);
         return;
     }
-    let dict = trans.translatedDict;
+    let dict = trans.processedDict;
     let edits = findConfig.collectedMatches.map((lineMatches, i) => {
         if (!lineMatches.length) return;
         let textLine = document.lineAt(i);

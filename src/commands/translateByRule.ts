@@ -2,7 +2,7 @@ import { Command } from './command';
 import * as vscode from 'vscode';
 import { google } from '../services/translators/google';
 import { doReplace } from '../services/regexpReplace/doReplace';
-import { IProcessError } from '../services/regexpReplace/interfaces';
+import { IProcessError, IProcessReulst } from '../services/regexpReplace/interfaces';
 import { uiMain } from '../../ui/main/uiMain';
 
 
@@ -23,10 +23,7 @@ export class CommandTranslateByRule extends Command {
         super("translatorAdvanced.translateByRule");
     }
 }
-interface IProcessReulst {
-    processedDict: any,
-    error: IProcessError,
-}
+
 async function translate(strings: string[], source: string, target: string): Promise<IProcessReulst> {
     let dict = {};
     if (!strings.length) return undefined
