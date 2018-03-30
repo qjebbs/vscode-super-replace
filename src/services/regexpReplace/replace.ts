@@ -34,7 +34,7 @@ export function getReplaceConfig(text: string): ReplaceConfig {
                 subs.push(text.substring(pos, i - 2));
                 indexes.push({
                     index: Number(n),
-                    type: IReplaceFillType.translated
+                    type: IReplaceFillType.processed
                 });
                 i += n.length - 1;
                 pos = i + 1;

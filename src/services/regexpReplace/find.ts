@@ -5,7 +5,7 @@ export function getFindConfig(find: string, rangTexts: IRangeText[], replaceConf
     let strings: string[] = [];
     //find out indexes of sub matches need to translate
     let indexes = replaceConfig.indexes.reduce((p, c) => {
-        if (c.type == IReplaceFillType.translated) p.push(c.index);
+        if (c.type == IReplaceFillType.processed) p.push(c.index);
         return p;
     }, <number[]>[]);
     let maxIndex = Math.max(...indexes);

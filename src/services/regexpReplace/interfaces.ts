@@ -16,7 +16,7 @@ export interface IFindConfig {
 }
 export enum IReplaceFillType {
     origin,
-    translated,
+    processed,
 }
 
 export interface IReplaceIndex {
