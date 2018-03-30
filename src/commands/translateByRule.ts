@@ -17,7 +17,7 @@ export class CommandTranslateByRule extends Command {
         if (!find || !replace) return;
 
         let editor = vscode.window.activeTextEditor;
-        doReplace(find, replace, editor, translate, "zh-cn", "en")
+        doReplace(editor, find, replace, translate, "en", "zh-cn")
     }
     constructor() {
         super("translatorAdvanced.translateByRule");
