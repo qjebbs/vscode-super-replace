@@ -3,11 +3,12 @@ import * as vscode from 'vscode';
 import { getReplaceConfig, CalcReplace } from './replace';
 import { getFindConfig } from './find';
 import { RangeReplace, editTextDocument } from '../common/tools';
-import { IProcessReulst } from './interfaces';
+import { IProcessReulst, IRangeText } from './interfaces';
 import { makeProcessor } from './processor';
 
 export async function doReplace(
     editor: vscode.TextEditor,
+    range: vscode.Range,
     find: string,
     replace: string,
     processor: (strings: string[], ...args: string[]) => Promise<IProcessReulst>,
@@ -15,6 +16,7 @@ export async function doReplace(
 );
 export async function doReplace(
     editor: vscode.TextEditor,
+    range: vscode.Range,
     find: string,
     replace: string,
     func: string,
@@ -22,16 +24,28 @@ export async function doReplace(
 );
 export async function doReplace(
     editor: vscode.TextEditor,
+    range: vscode.Range,
     find: string,
     replace: string,
     ...para: any[],
 ) {
     try {
         let document = editor.document;
-        let lines = [...new Array(document.lineCount).keys()].map((_, i) => document.lineAt(i).text);
+        if (!range) range = documentToRange(document);
+        if (range.isEmpty) return;
+        let lineRanges: IRangeText[] = [];
+
+        for (let i = range.start.line; i <= range.end.line; i++) {
+            let rng = document.lineAt(i).range.intersection(range);
+            if (!rng) continue;
+            lineRanges.push(<IRangeText>{
+                text: document.getText(rng),
+                range: rng
+            });
+        }
 
         let replaceConfig = getReplaceConfig(replace);
-        let findConfig = getFindConfig(find, lines, replaceConfig);
+        let findConfig = getFindConfig(find, lineRanges, replaceConfig);
 
         let strings = findConfig.subMatchesToTransform;
 
@@ -66,9 +80,8 @@ export async function doReplace(
             if (lineMatches.restSubStrings.length - lineMatches.matches.length !== 1)
                 throw new Error("查找结果子串与匹配数量不合预期！");
             if (!lineMatches.matches.length) return undefined;
-            let textLine = document.lineAt(i);
             // let text = textLine.text;
-            let rng = textLine.range;
+            let rng = lineMatches.range;
             let text = lineMatches.matches.reduce((p, m, i) => {
                 let rep = CalcReplace(replaceConfig, m, dict);
                 return p + rep + lineMatches.restSubStrings[i + 1];
@@ -83,5 +96,9 @@ export async function doReplace(
     } catch (error) {
         return Promise.reject(error);
     }
-
+}
+function documentToRange(document: vscode.TextDocument): vscode.Range {
+    let first = document.lineAt(0).range;
+    let last = document.lineAt(document.lineCount - 1).range;
+    return first.union(last);
 }

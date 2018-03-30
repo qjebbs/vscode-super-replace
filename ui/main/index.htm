@@ -32,21 +32,24 @@
                 <label class="control-label" for="textReplace">Replace</label>
                 <input type="text" class="form-control" id="textReplace" name="textReplace" required placeholder="Replace Text. $0 for Submatch, $$0 for Processed Submatch">
             </div>
+            <div class="form-inline">
+                <label class="control-label" for="range">Range</label>
+            </div>
+            <div id="range" class="form-group">
+                <label class="radio-inline">
+                    <input type="radio" id="radRngSelection" name="range" value="0" checked> Selection
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="range" value="1"> Whole Document
+                </label>
+            </div>
             <div class="form-group">
                 <label for="func">Processing Function</label>
-                <!-- <div class="form-group">
-                    <label class="radio-inline">
-                        <input type="radio" name="funcType" value="" checked> Normal Function
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="funcType" value="asnyc"> Async Function
-                    </label>
-                </div> -->
                 <div id="inputFunc" class="form-group">
                     <textarea class="form-control" id="textFunc" name="textFunc" required rows="10"></textarea>
                 </div>
             </div>
-            <button type="button" class="btn btn-primary" id="doReplace">Submit</button>
+            <button type="button" class="btn btn-primary" id="doReplace">Replace</button>
         </form>
     </div>
 </body>

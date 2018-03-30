@@ -1,7 +1,14 @@
+import * as vscode from 'vscode';
+
+export interface IRangeText {
+    range: vscode.Range;
+    text: string;
+}
+
 export interface IFindMatches {
+    range: vscode.Range;
     matches: RegExpExecArray[];
     restSubStrings: string[];
-
 }
 export interface IFindConfig {
     collectedMatches: IFindMatches[];

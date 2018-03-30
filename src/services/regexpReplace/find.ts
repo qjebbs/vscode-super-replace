@@ -1,7 +1,7 @@
-import { ReplaceConfig, IReplaceFillType, IFindMatches } from "./interfaces";
+import { ReplaceConfig, IReplaceFillType, IFindMatches, IRangeText } from "./interfaces";
 import { IFindConfig } from "./interfaces";
 
-export function getFindConfig(find: string, texts: string[], replaceConfig: ReplaceConfig): IFindConfig {
+export function getFindConfig(find: string, rangTexts: IRangeText[], replaceConfig: ReplaceConfig): IFindConfig {
     let strings: string[] = [];
     //find out indexes of sub matches need to translate
     let indexes = replaceConfig.indexes.reduce((p, c) => {
@@ -12,28 +12,29 @@ export function getFindConfig(find: string, texts: string[], replaceConfig: Repl
 
     let reg = new RegExp(find, "g");
     let collectedFinds: IFindMatches[] = [];
-    for (let i = 0; i < texts.length; i++) {
-        let text = texts[i];
+    for (let i = 0; i < rangTexts.length; i++) {
+        let rngText = rangTexts[i];
         let lineMatches: RegExpExecArray[] = [];
         let matches: RegExpExecArray;
         let subs: string[] = [];
         let pos = 0;
-        while (matches = reg.exec(text)) {
+        while (matches = reg.exec(rngText.text)) {
             if (maxIndex > matches.length - 1) {
                 throw new Error("Sub match index out of bound. Please Check your replace text!");
             }
             lineMatches.push(matches);
             // collect needed sub matched to translate
             strings.push(...indexes.map(i => matches[i]));
-            subs.push(text.substr(pos, reg.lastIndex - matches[0].length - pos));
+            subs.push(rngText.text.substr(pos, reg.lastIndex - matches[0].length - pos));
             pos = reg.lastIndex;
         }
-        if (pos >= text.length) {
+        if (pos >= rngText.text.length) {
             subs.push("");
         } else {
-            subs.push(text.substring(pos, text.length));
+            subs.push(rngText.text.substring(pos, rngText.text.length));
         }
         collectedFinds.push(<IFindMatches>{
+            range: rngText.range,
             matches: lineMatches,
             restSubStrings: subs
         });
