@@ -11,4 +11,4 @@ class Conifg extends ConfigReader {
 
 }
 
-export const config = new Conifg('translatorAdvanced');
+export const config = new Conifg('superReplace');

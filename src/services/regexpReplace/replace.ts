@@ -1,89 +1,104 @@
-import { ReplaceConfig, IReplaceIndex, IReplaceFillType } from "./interfaces";
 
-export function getReplaceConfig(text: string): ReplaceConfig {
-    let subs: string[] = [];
-    let indexes: IReplaceIndex[] = [];
-    let pos = 0;
-    let stage = 0;
-    for (let i = 0; i < text.length; i++) {
-        let ch = text.substr(i, 1);
-        let nextCh = i < text.length - 1 ? text.substr(i + 1, 1) : "";
-        if (ch == '\\') {
-            i++;
-            continue;
-        } else if (ch == "$") {
-            stage++;
-            continue;
-        }
-        if (stage == 1) {
-            let n = extractNumner(text, i);
-            if (n) {
-                subs.push(text.substring(pos, i - 1));
-                indexes.push({
-                    index: Number(n),
-                    type: IReplaceFillType.origin
-                });
-                i += n.length - 1;
-                pos = i + 1;
-                stage = 0;
-            }
-        }
-        if (stage >= 2) {
-            let n = extractNumner(text, i);
-            if (n) {
-                subs.push(text.substring(pos, i - 2));
-                indexes.push({
-                    index: Number(n),
-                    type: IReplaceFillType.processed
-                });
-                i += n.length - 1;
-                pos = i + 1;
-                stage = 0;
-            }
-        }
-    }
-    if (pos >= text.length) {
-        subs.push("");
-    } else {
-        subs.push(text.substring(pos, text.length));
-    }
-    return <ReplaceConfig>{
-        indexes: indexes,
-        restSubStrings: subs.map(s => escape(s))
-    };
-}
-function escape(text: string): string {
-    return text.replace("\\t", "\t")
-        .replace(/\\n/g, "\n")
-        .replace(/\\r/g, "\r")
-        .replace(/\\(.)/g, "$1");
-}
-function extractNumner(text: string, from: number): string {
-    let str = "";
-    let maxLen = text.length - from;
-    for (let i = 1; i <= maxLen; i++) {
-        let s = text.substr(from, i);
-        if (isNumber(s)) str = s; else break;
-    }
-    return str;
-}
-function isNumber(value: any) {
-    return /^\d+$/.test(value.toString());
-}
+import * as vscode from 'vscode';
+import { getReplaceConfig, CalcReplace } from './replaceConfig';
+import { getFindConfig } from './findConfig';
+import { RangeReplace, editTextDocument } from '../common/tools';
+import { IProcessReulst, IRangeText } from './interfaces';
+import { makeProcessor } from './processor';
 
-export function CalcReplace(replace: ReplaceConfig, matches: RegExpExecArray, translatedDict: any): string {
-    if (replace.restSubStrings.length - replace.indexes.length !== 1) {
-        let msg = "替换子串与索引数量不合预期！";
-        console.log(msg);
-        throw new Error(msg);
-    }
-    return replace.indexes.reduce((p, c, i) => {
-        let fillText = "";
-        if (c.type == IReplaceFillType.origin) {
-            fillText = matches[c.index];
-        } else {
-            fillText = translatedDict[matches[c.index]];
+export async function doReplace(
+    editor: vscode.TextEditor,
+    range: vscode.Range,
+    find: string,
+    replace: string,
+    processor: (strings: string[], ...args: string[]) => Promise<IProcessReulst>,
+    ...processorArgs: string[]
+);
+export async function doReplace(
+    editor: vscode.TextEditor,
+    range: vscode.Range,
+    find: string,
+    replace: string,
+    func: string,
+    ...processorArgs: string[]
+);
+export async function doReplace(
+    editor: vscode.TextEditor,
+    range: vscode.Range,
+    find: string,
+    replace: string,
+    ...para: any[],
+) {
+    try {
+        let document = editor.document;
+        if (!range) range = documentToRange(document);
+        if (range.isEmpty) return;
+        let lineRanges: IRangeText[] = [];
+
+        for (let i = range.start.line; i <= range.end.line; i++) {
+            let rng = document.lineAt(i).range.intersection(range);
+            if (!rng) continue;
+            lineRanges.push(<IRangeText>{
+                text: document.getText(rng),
+                range: rng
+            });
         }
-        return p + fillText + replace.restSubStrings[i + 1];
-    }, replace.restSubStrings[0]);
+
+        let replaceConfig = getReplaceConfig(replace);
+        let findConfig = getFindConfig(find, lineRanges, replaceConfig);
+
+        let strings = findConfig.subMatchesToTransform;
+
+        let dict = {};
+        if (strings.length) {
+            let processor: (strings: string[], ...args: string[]) => Promise<IProcessReulst>;
+            let processorArgs: string[];
+            if (para[0] instanceof Function) {
+                processor = para.shift();
+                processorArgs = para;
+            } else {
+                let func = para.shift();
+                processorArgs = para;
+                processor = await makeProcessor(func);
+                if (!(processor instanceof Function)) {
+                    return Promise.reject(
+                        "Your input is not a function or contains error:\n" +
+                        processor +
+                        "\n\nInput:\n" +
+                        func
+                    );
+                };
+            }
+            let result = await processor(strings, ...processorArgs);
+            if (!result) return;
+            if (result.error) {
+                return Promise.reject(result.error.message);
+            }
+            dict = result.processedDict;
+        }
+        let edits = findConfig.collectedMatches.map((lineMatches, i) => {
+            if (lineMatches.restSubStrings.length - lineMatches.matches.length !== 1)
+                throw new Error("查找结果子串与匹配数量不合预期！");
+            if (!lineMatches.matches.length) return undefined;
+            // let text = textLine.text;
+            let rng = lineMatches.range;
+            let text = lineMatches.matches.reduce((p, m, i) => {
+                let rep = CalcReplace(replaceConfig, m, dict);
+                return p + rep + lineMatches.restSubStrings[i + 1];
+            }, lineMatches.restSubStrings[0]);
+
+            return <RangeReplace>{
+                range: rng,
+                replace: text,
+            }
+        })
+        editTextDocument(document, edits);
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+function documentToRange(document: vscode.TextDocument): vscode.Range {
+    let first = document.lineAt(0).range;
+    let last = document.lineAt(document.lineCount - 1).range;
+    return first.union(last);
 }

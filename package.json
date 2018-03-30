@@ -1,7 +1,7 @@
 {
-    "name": "translator-advanced",
-    "displayName": "Translator Advanced",
-    "description": "Advanced tanslator which allows you translate precise ranges of text.",
+    "name": "super-replace",
+    "displayName": "Super Replace",
+    "description": "Advanced regexp replace which allows you assign additional text processing function when replacing.",
     "version": "0.0.1",
     "publisher": "jebbs",
     "engines": {
@@ -11,43 +11,22 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:translatorAdvanced.translateSelect",
-        "onCommand:translatorAdvanced.translateByRule",
-        "onCommand:translatorAdvanced.regexpReplaceExtented"
+        "onCommand:superReplace.replaceWindow"
     ],
     "main": "./out/src/extension",
     "contributes": {
         "commands": [
             {
-                "command": "translatorAdvanced.translateSelect",
-                "title": "Translate Selected",
-                "icon":"Translator"
-            },
-            {
-                "command": "translatorAdvanced.translateByRule",
-                "title": "Advanced Translate...",
-                "icon":"Translator"
-            },
-            {
-                "command": "translatorAdvanced.regexpReplaceExtented",
-                "title": "Advanced RegExp Replace...",
-                "icon":"Translator"
+                "command": "superReplace.replaceWindow",
+                "title": "Open Replace Window...",
+                "category": "Super Replace"
             }
         ],
-        "menus": {
-            "editor/context": [
-                {
-                    "when": "editorHasSelection",
-                    "command": "translatorAdvanced.translateSelect",
-                    "group": "translatorAdvanced"
-                }
-            ]
-        },
         "configuration":[
             {
-                "title": "Translator Advanced Configuration",
+                "title": "Super Replace Configuration",
                 "properties": {
-                    "translatorAdvanced.googleApiKey":{
+                    "superReplace.googleApiKey":{
                         "type":"string",
                         "default":"",
                         "description": "Type your google API key in order to make google translator to work",

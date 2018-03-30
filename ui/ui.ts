@@ -18,7 +18,7 @@ export class UI extends vscode.Disposable implements vscode.TextDocumentContentP
         this.Uri = uri;
         this.Load(file);
         this._disposable.push(
-            vscode.workspace.registerTextDocumentContentProvider('translatorAdvanced', this)
+            vscode.workspace.registerTextDocumentContentProvider('superReplace', this)
         );
     }
     Load(file: string) {

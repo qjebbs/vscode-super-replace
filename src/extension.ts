@@ -1,10 +1,8 @@
 'use strict';
 
 import * as vscode from 'vscode';
-import { CommandTranslateSelected } from './commands/translateSelected';
-import { CommandTranslateByRule } from './commands/translateByRule';
 import { config } from './services/common/config';
-import { CommandDoReplace, CommandDoReplaceUI } from './commands/doReplace';
+import { CommandReplace, CommandDoReplaceUI } from './commands/replace';
 import { setContext } from './services/common/context';
 import { uiMain } from '../ui/main/uiMain';
 
@@ -14,9 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
     setContext(context);
     context.subscriptions.push(
         config, uiMain,
-        new CommandTranslateSelected(),
-        new CommandTranslateByRule(),
-        new CommandDoReplace(),
+        new CommandReplace(),
         new CommandDoReplaceUI,
     );
 }

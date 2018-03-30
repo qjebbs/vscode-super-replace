@@ -1,7 +1,7 @@
 import { Command } from './command';
 import { uiMain } from '../../ui/main/uiMain';
 import * as vscode from 'vscode';
-import { doReplace } from '../services/regexpReplace/doReplace';
+import { doReplace } from '../services/regexpReplace/replace';
 import { makeProcessor } from '../services/regexpReplace/processor';
 import { showMessagePanel } from '../services/common/tools';
 
@@ -10,11 +10,11 @@ export class CommandDoReplaceUI extends Command {
         uiMain.show();
     }
     constructor() {
-        super("translatorAdvanced.regexpReplaceExtented");
+        super("superReplace.replaceWindow");
     }
 }
 
-export class CommandDoReplace extends Command {
+export class CommandReplace extends Command {
     async execute(...args: any[]) {
         console.log(args);
         let find = args[0].find;
@@ -30,6 +30,6 @@ export class CommandDoReplace extends Command {
         });
     }
     constructor() {
-        super("translatorAdvanced.doReplace");
+        super("superReplace.doReplace");
     }
 }

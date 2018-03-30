@@ -18,7 +18,7 @@ function doReplace() {
             func: textFunc.value,
             range: radRngSelection.checked ? 0 : 1
         });
-        sendMsg.attributes["href"].value = encodeURI('command:translatorAdvanced.doReplace?' + args);
+        sendMsg.attributes["href"].value = encodeURI('command:superReplace.doReplace?' + args);
         // console.log(sendMsg.attributes["href"].value);
         sendMsg.click();
     }

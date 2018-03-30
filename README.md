@@ -1,6 +1,6 @@
-# translator-advanced README
+# super-replace README
 
-This is the README for your extension "translator-advanced". After writing up a brief description, we recommend including the following sections.
+This is the README for your extension "super-replace". After writing up a brief description, we recommend including the following sections.
 
 ## Features
 
