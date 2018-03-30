@@ -4,8 +4,13 @@ import { IProcessReulst } from "./interfaces";
 export async function makeProcessor(func: string): Promise<(strings: string[], ...args: string[]) => Promise<IProcessReulst>> {
     let f = evalFunction(func);
     if (!(f instanceof Function)) return Promise.resolve(f);
-    let test = await f([]);
-    let isArrayFunc = test instanceof Array;
+    let isArrayFunc = true;
+    try {
+        let test = f([]);
+        isArrayFunc = test instanceof Array;
+    } catch (error) {
+        isArrayFunc = false;
+    }
     return async function (strings: string[], ...args: string[]): Promise<IProcessReulst> {
         let dict = {};
         if (!strings.length) return undefined
