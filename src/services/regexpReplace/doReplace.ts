@@ -27,25 +27,6 @@ export async function doReplace(
     ...para: any[],
 ) {
     try {
-        let processor: (strings: string[], ...args: string[]) => Promise<IProcessReulst>;
-        let processorArgs: string[];
-        if (para[0] instanceof Function) {
-            processor = para.shift();
-            processorArgs = para;
-        } else {
-            let func = para.shift();
-            processorArgs = para;
-            processor = await makeProcessor(func);
-            if (!(processor instanceof Function)) {
-                return Promise.reject(
-                    "Your input is not a function or contains error:\n" +
-                    processor +
-                    "\n\nInput:\n" +
-                    func
-                );
-            };
-        }
-
         let document = editor.document;
         let lines = [...new Array(document.lineCount).keys()].map((_, i) => document.lineAt(i).text);
 
@@ -53,14 +34,34 @@ export async function doReplace(
         let findConfig = getFindConfig(find, lines, replaceConfig);
 
         let strings = findConfig.subMatchesToTransform;
-        if (!strings.length) return;
 
-        let trans = await processor(strings, ...processorArgs);
-        if (!trans) return;
-        if (trans.error) {
-            return Promise.reject(trans.error.message);
+        let dict = {};
+        if (strings.length) {
+            let processor: (strings: string[], ...args: string[]) => Promise<IProcessReulst>;
+            let processorArgs: string[];
+            if (para[0] instanceof Function) {
+                processor = para.shift();
+                processorArgs = para;
+            } else {
+                let func = para.shift();
+                processorArgs = para;
+                processor = await makeProcessor(func);
+                if (!(processor instanceof Function)) {
+                    return Promise.reject(
+                        "Your input is not a function or contains error:\n" +
+                        processor +
+                        "\n\nInput:\n" +
+                        func
+                    );
+                };
+            }
+            let result = await processor(strings, ...processorArgs);
+            if (!result) return;
+            if (result.error) {
+                return Promise.reject(result.error.message);
+            }
+            dict = result.processedDict;
         }
-        let dict = trans.processedDict;
         let edits = findConfig.collectedMatches.map((lineMatches, i) => {
             if (lineMatches.restSubStrings.length - lineMatches.matches.length !== 1)
                 throw new Error("查找结果子串与匹配数量不合预期！");
