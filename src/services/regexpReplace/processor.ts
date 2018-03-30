@@ -6,7 +6,9 @@ export async function makeProcessor(func: string): Promise<(strings: string[], .
     if (!(f instanceof Function)) return Promise.resolve(f);
     let isArrayFunc = true;
     try {
-        let test = f([]);
+        // await awaits the builtin async function, whose errors cannot be catched
+        // await don't wait for user function, we can catch the error if it cannot deal with array.
+        let test = await f([]);
         isArrayFunc = test instanceof Array;
     } catch (error) {
         isArrayFunc = false;
