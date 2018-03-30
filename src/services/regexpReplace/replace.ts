@@ -72,8 +72,11 @@ function isNumber(value: any) {
 }
 
 export function CalcReplace(replace: ReplaceConfig, matches: RegExpExecArray, translatedDict: any): string {
-    if (replace.restSubStrings.length - replace.indexes.length !== 1)
-        throw new Error("替换子串与索引数量不合预期！");
+    if (replace.restSubStrings.length - replace.indexes.length !== 1) {
+        let msg = "替换子串与索引数量不合预期！";
+        console.log(msg);
+        throw new Error(msg);
+    }
     return replace.indexes.reduce((p, c, i) => {
         let fillText = "";
         if (c.type == IReplaceFillType.origin) {

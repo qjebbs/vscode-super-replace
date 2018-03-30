@@ -4,15 +4,48 @@ import { getReplaceConfig, CalcReplace } from './replace';
 import { getFindConfig } from './find';
 import { RangeReplace, editTextDocument } from '../common/tools';
 import { IProcessReulst } from './interfaces';
+import { makeProcessor } from './processor';
 
 export async function doReplace(
+    editor: vscode.TextEditor,
     find: string,
     replace: string,
-    editor: vscode.TextEditor,
     processor: (strings: string[], ...args: string[]) => Promise<IProcessReulst>,
     ...processorArgs: string[]
+);
+export async function doReplace(
+    editor: vscode.TextEditor,
+    find: string,
+    replace: string,
+    func: string,
+    ...processorArgs: string[]
+);
+export async function doReplace(
+    editor: vscode.TextEditor,
+    find: string,
+    replace: string,
+    ...para: any[],
 ) {
     try {
+        let processor: (strings: string[], ...args: string[]) => Promise<IProcessReulst>;
+        let processorArgs: string[];
+        if (para[0] instanceof Function) {
+            processor = para.shift();
+            processorArgs = para;
+        } else {
+            let func = para.shift();
+            processorArgs = para;
+            processor = await makeProcessor(func);
+            if (!(processor instanceof Function)) {
+                return Promise.reject(
+                    "Your input is not a function or contains error:\n" +
+                    processor +
+                    "\n\nInput:\n" +
+                    func
+                );
+            };
+        }
+
         let document = editor.document;
         let lines = [...new Array(document.lineCount).keys()].map((_, i) => document.lineAt(i).text);
 
@@ -21,6 +54,7 @@ export async function doReplace(
 
         let strings = findConfig.subMatchesToTransform;
         if (!strings.length) return;
+
         let trans = await processor(strings, ...processorArgs);
         if (!trans) return;
         if (trans.error) {

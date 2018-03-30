@@ -23,12 +23,7 @@ export class CommandDoReplace extends Command {
 
         let editors = vscode.window.visibleTextEditors;
 
-        let processor = await makeProcessor(func);
-        if (!(processor instanceof Function)) {
-            showMessagePanel("Your input is not a function or contains error:\n" + processor + "\n\nInput:\n" + func);
-            return;
-        };
-        doReplace(find, replace, editors[0], processor).catch(err => {
+        doReplace(editors[0], find, replace, func).catch(err => {
             showMessagePanel(err)
         });
     }
