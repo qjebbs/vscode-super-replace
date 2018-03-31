@@ -16,14 +16,14 @@ export class CommandDoReplaceUI extends Command {
 
 export class CommandReplace extends Command {
     async execute(...args: any[]) {
-        console.log(args);
+        // console.log(args);
         let find = args[0].find;
         let replace = args[0].replace;
         let func = args[0].func;
         let range = args[0].range;
 
         let editors = vscode.window.visibleTextEditors;
-        editors.map(e => console.log(e.document.uri.fsPath));
+        // editors.map(e => console.log(e.document.uri.fsPath));
         let editor = editors[0];
         doReplace(editor, range ? undefined : editor.selection, find, replace, func).catch(err => {
             showMessagePanel(err)
