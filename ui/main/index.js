@@ -1,5 +1,5 @@
 var templates = {
-    "googleTranslate": `// gtranslate translates the match text, eg. English to Simplified Chinese
+    "googleTranslate": `// gtranslate returns a function that translates the match text.
 // change the "en" and "zh-cn" to whatever source and target language you want
 // don't forget to configurate "superReplace.googleApiKey"
 gtranslate("en","zh-cn")`,

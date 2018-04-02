@@ -38,10 +38,10 @@
             </div>
             <div id="range" class="form-group">
                 <label class="radio-inline">
-                    <input type="radio" id="radRngSelection" name="range" value="0" checked> Selection
+                    <input type="radio" id="radRngSelection" name="range" value="0"> Selection
                 </label>
                 <label class="radio-inline">
-                    <input type="radio" name="range" value="1"> Whole Document
+                    <input type="radio" name="range" value="1" checked> Whole Document
                 </label>
             </div>
             <div class="form-group">
@@ -111,11 +111,14 @@
                         </p>
                         <h4>Processing Function</h4>
                         <p>
-                            Processing Function is used to process the sub match as processed sub match.
+                            Processing Function is used to process the sub match to processed sub match.
                         </p>
                         <p>
                             You can define your own function for the maximum possibility, and also use
                             <span class="label label-success">built-in functions & samples</span>.
+                        </p>
+                        <p>
+                            The function could be either "(texts: string[])=>strings[]" or "(text: string)=>string".
                         </p>
                     </div>
                     <div class="modal-footer">
