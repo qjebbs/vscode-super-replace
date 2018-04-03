@@ -2,8 +2,8 @@ import { ConfigReader } from "./configReader";
 
 
 class Conifg extends ConfigReader {
-    constructor(name: string) {
-        super(name);
+    constructor() {
+        super('superReplace');
     }
     get googleApiKey(): string {
         return this.read<string>("googleApiKey");
@@ -11,4 +11,4 @@ class Conifg extends ConfigReader {
 
 }
 
-export const config = new Conifg('superReplace');
+export const config = new Conifg();
