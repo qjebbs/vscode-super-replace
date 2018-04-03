@@ -1,11 +1,21 @@
 {
     "name": "super-replace",
-    "displayName": "Super Replace",
-    "description": "Advanced regexp replace which allows you assign additional text processing function when replacing.",
+    "displayName": "Super Replace - Translator, Text Processor And More, with Infinite Possibilities",
+    "description": "Do translations and any text transformations with regex replace!",
+    "icon": "images/icon.png",
     "version": "0.0.1",
     "publisher": "jebbs",
     "engines": {
-        "vscode": "^1.21.0"
+        "vscode": "^1.11.0"
+    },
+    "license": "SEE LICENSE IN LICENSE.txt",
+    "bugs": {
+      "url": "https://github.com/qjebbs/vscode-super-replace/issues"
+    },
+    "homepage": "https://github.com/qjebbs/vscode-super-replace",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/qjebbs/vscode-super-replace.git"
     },
     "categories": [
         "Other"
@@ -29,7 +39,7 @@
                     "superReplace.googleApiKey":{
                         "type":"string",
                         "default":"",
-                        "description": "Type your google API key in order to make google translator to work",
+                        "description": "The Google API key needed by the gtranslate function",
                         "scope": "window"
                     }
                 }
