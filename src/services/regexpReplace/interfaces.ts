@@ -34,7 +34,11 @@ export interface IProcessError {
     message: string,
 }
 
+export type IProcessedResultDict = {
+    [key: string]: string
+}
+
 export interface IProcessReulst {
-    processedDict: any,
+    processedDict: IProcessedResultDict,
     error: IProcessError,
 }

@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import { getReplaceConfig, CalcReplace } from './replaceConfig';
 import { getFindConfig } from './findConfig';
 import { RangeReplace, editTextDocument } from '../common/tools';
-import { IProcessReulst, IRangeText } from './interfaces';
+import { IProcessReulst, IRangeText, IProcessedResultDict } from './interfaces';
 import { makeProcessor } from './processor';
 
 export async function doReplace(
@@ -49,7 +49,7 @@ export async function doReplace(
 
         let strings = findConfig.subMatchesToTransform;
 
-        let dict = {};
+        let dict: IProcessedResultDict = {};
         if (strings.length) {
             let processor: (strings: string[], ...args: string[]) => Promise<IProcessReulst>;
             let processorArgs: string[];

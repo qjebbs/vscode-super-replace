@@ -1,5 +1,5 @@
 import { evalFunction } from "./evalFunc";
-import { IProcessReulst } from "./interfaces";
+import { IProcessReulst, IProcessedResultDict } from "./interfaces";
 
 export async function makeProcessor(func: string): Promise<(strings: string[], ...args: string[]) => Promise<IProcessReulst>> {
     let f = evalFunction(func);
@@ -14,7 +14,7 @@ export async function makeProcessor(func: string): Promise<(strings: string[], .
         isArrayFunc = false;
     }
     return async function (strings: string[], ...args: string[]): Promise<IProcessReulst> {
-        let dict = {};
+        let dict: IProcessedResultDict = {};
         if (!strings.length) return undefined
         let results: string[] = []
         try {

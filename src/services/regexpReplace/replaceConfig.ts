@@ -1,4 +1,4 @@
-import { ReplaceConfig, IReplaceIndex, IReplaceFillType } from "./interfaces";
+import { ReplaceConfig, IReplaceIndex, IReplaceFillType, IProcessedResultDict } from "./interfaces";
 
 export function getReplaceConfig(text: string): ReplaceConfig {
     let subs: string[] = [];
@@ -67,11 +67,11 @@ function extractNumner(text: string, from: number): string {
     }
     return str;
 }
-function isNumber(value: any) {
+function isNumber(value: string) {
     return /^\d+$/.test(value.toString());
 }
 
-export function CalcReplace(replace: ReplaceConfig, matches: RegExpExecArray, translatedDict: any): string {
+export function CalcReplace(replace: ReplaceConfig, matches: RegExpExecArray, processedDict: IProcessedResultDict): string {
     if (replace.restSubStrings.length - replace.indexes.length !== 1) {
         let msg = "替换子串与索引数量不合预期！";
         console.log(msg);
@@ -82,7 +82,7 @@ export function CalcReplace(replace: ReplaceConfig, matches: RegExpExecArray, tr
         if (c.type == IReplaceFillType.origin) {
             fillText = matches[c.index];
         } else {
-            fillText = translatedDict[matches[c.index]];
+            fillText = processedDict[matches[c.index]];
         }
         return p + fillText + replace.restSubStrings[i + 1];
     }, replace.restSubStrings[0]);
