@@ -22,6 +22,12 @@ For example, find `\w+` replace `$$0` function `s=>s.toUpperCase()` will transfo
 
 > To open the Super Replace tool, find and exectue command `Super Replace: Open Replace Window...`.
 
+## Requirements
+
+If you want to translate, you need a Google Cloud Translate API Key and configurate `superReplace.googleApiKey`. You can follow the [Atril Solutions step by step Guide](https://atrilsolutions.zendesk.com/hc/en-us/articles/205540421-How-to-obtain-a-Google-Translate-API-key) to create a key.
+
+**Reference**: [Language Support by Google Translate](https://cloud.google.com/translate/docs/languages)
+
 ## Extension Settings
 
 `superReplace.googleApiKey`: The Google API key needed by the `gtranslate` function.
