@@ -68,7 +68,7 @@ function extractNumner(text: string, from: number): string {
     return str;
 }
 function isNumber(value: string) {
-    return /^\d+$/.test(value.toString());
+    return /^\d+$/.test(value);
 }
 
 export function CalcReplace(replace: ReplaceConfig, matches: RegExpExecArray, processedDict: IProcessedResultDict): string {

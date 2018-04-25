@@ -24,11 +24,13 @@ function doReplace() {
             func: textFunc.value,
             range: radRngSelection.checked ? 0 : 1
         });
-        sendMsg.attributes["href"].value = encodeURI('command:superReplace.doReplace?' + args);
+        let uri = encodeURI('command:superReplace.doReplace?' + args);
+        sendMsg.attributes["href"].value = uri;
         // console.log(sendMsg.attributes["href"].value);
         sendMsg.click();
     }
 }
+
 
 function onListClick(e) {
     let tmpl = "";
