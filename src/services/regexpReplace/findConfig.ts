@@ -2,6 +2,7 @@ import { ReplaceConfig, IReplaceFillType, IFindMatches, IRangeText } from "./int
 import { IFindConfig } from "./interfaces";
 
 export function getFindConfig(find: string, rangTexts: IRangeText[], replaceConfig: ReplaceConfig): IFindConfig {
+    if (!find) return undefined;
     let stringsSet = new Set<string>([]);
     let strings: string[] = [];
     //find out indexes of sub matches need to translate
@@ -41,7 +42,7 @@ export function getFindConfig(find: string, rangTexts: IRangeText[], replaceConf
             restSubStrings: subs
         });
     }
-    strings=Array.from(stringsSet);
+    strings = Array.from(stringsSet);
     return <IFindConfig>{
         collectedMatches: collectedFinds,
         subMatchesToTransform: strings,

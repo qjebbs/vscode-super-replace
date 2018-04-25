@@ -21,6 +21,7 @@ export class CommandReplace extends Command {
         let replace = args[0].replace;
         let func = args[0].func;
         let range = args[0].range;
+        if (!find) vscode.window.showInformationMessage("Find pattern cannot be empty!");
 
         let editors = vscode.window.visibleTextEditors;
         // editors.map(e => console.log(e.document.uri.fsPath));

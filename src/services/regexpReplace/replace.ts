@@ -30,6 +30,7 @@ export async function doReplace(
     ...para: any[],
 ) {
     try {
+        if (!find) return;
         let document = editor.document;
         if (!range) range = documentToRange(document);
         if (range.isEmpty) return;
@@ -46,6 +47,7 @@ export async function doReplace(
 
         let replaceConfig = getReplaceConfig(replace);
         let findConfig = getFindConfig(find, lineRanges, replaceConfig);
+        if (!findConfig) return;
 
         let strings = findConfig.subMatchesToTransform;
 
