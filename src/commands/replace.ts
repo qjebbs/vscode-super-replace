@@ -2,8 +2,6 @@ import { Command } from './command';
 import { uiMain } from '../ui/uis';
 import * as vscode from 'vscode';
 import { doReplace } from '../services/regexpReplace/replace';
-import { makeProcessor } from '../services/regexpReplace/processor';
-import { showMessagePanel } from '../services/common/tools';
 
 let state = {};
 
@@ -24,14 +22,13 @@ export class CommandReplace extends Command {
         let replace = option.replace;
         let func = option.func;
         let range = option.range;
-        if (!find) vscode.window.showInformationMessage("Find pattern cannot be empty!");
-
+        if (!find) {
+            vscode.window.showInformationMessage("Find pattern cannot be empty!");
+            return;
+        }
         let editors = vscode.window.visibleTextEditors;
-        // editors.map(e => console.log(e.document.uri.fsPath));
         let editor = editors[0];
-        doReplace(editor, range ? undefined : editor.selection, find, replace, func).catch(err => {
-            showMessagePanel(err)
-        });
+        await doReplace(editor, range ? undefined : editor.selection, find, replace, func);
     }
     constructor() {
         super("superReplace.doReplace");

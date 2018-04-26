@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-let outputPanel = vscode.window.createOutputChannel("Tranlator");
+let outputPanel = vscode.window.createOutputChannel("SuperReplace");
 
 export function parseError(error: any): string {
     if (typeof (error) === "string") {
