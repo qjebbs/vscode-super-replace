@@ -14,7 +14,6 @@
 
 <body>
     <div style="display:none;">
-        <p id="state">${env}</p>
         <a id="sendMsg" href=""></a>
     </div>
     <div class="container-fluid">
@@ -83,13 +82,9 @@
                 </div>
                 <form id="form_data">
                     <div class="modal-body">
-                        <!-- <h4>Inroduction</h4>
-                        <p>
-                            Super Replace is a extended regexp replacing tool.
-                        </p> -->
                         <h4>Sub Match</h4>
                         <p>
-                            we know that, with regexp replace, we can use
+                            We know that, with regexp replace, we can use
                             <span class="label label-info">$&lt;index&gt;</span> like
                             <span class="label label-info">$0, $1</span>
                             in replace text, which means whole match ($0), or first sub match ($1).
@@ -104,21 +99,17 @@
                             <span class="label label-success">$$0, $$1</span>, which means processed whole match ($$0), or processed first sub match ($$1)
                         </p>
                         <p>
-                            A processed match is a result of orignal match processed by the function given in the "Processing Function" field.
-                        </p>
-                        <p>
                             <br>
                         </p>
                         <h4>Processing Function</h4>
                         <p>
-                            Processing Function is used to process the sub match to processed sub match.
+                            The foregoing processed matches are outputs of the function given here.
+                            It recieve sub matches as input, and could be either
+                            "(texts: string[])=>strings[]" or "(text: string)=>string".
                         </p>
                         <p>
                             You can define your own function for the maximum possibility, and also use
-                            <span class="label label-success">built-in functions & samples</span>.
-                        </p>
-                        <p>
-                            The function could be either "(texts: string[])=>strings[]" or "(text: string)=>string".
+                            <span class="label label-success">built-in functions &amp; samples</span>.
                         </p>
                     </div>
                     <div class="modal-footer">

@@ -19,7 +19,6 @@ window.addEventListener("load", () => {
     textReplace = document.getElementById("textReplace");
     textFunc = document.getElementById("textFunc");
     radRngSelection = document.getElementById("radRngSelection");
-    state = JSON.parse(document.getElementById("state").innerHTML);
     let btnDoReplace = document.getElementById("doReplace");
     btnDoReplace.addEventListener("click", doReplace);
 });
@@ -29,9 +28,6 @@ function execute(arg) {
     let uri = encodeURI('command:superReplace.doReplace?' + args);
     sendMsg.attributes["href"].value = uri;
     // sendMsg.href = uri;
-    // console.log(!!sendMsg.tagName && sendMsg.tagName.toLowerCase() === 'a' && !!sendMsg.href,
-    //     sendMsg.tagName, sendMsg.tagName.toLowerCase(), sendMsg.href)
-    // console.log(uri);
     sendMsg.click();
 }
 
