@@ -1,5 +1,5 @@
 import { Command } from './command';
-import { uiMain } from '../../ui/main/uiMain';
+import { uiMain } from '../ui/uiMain';
 import * as vscode from 'vscode';
 import { doReplace } from '../services/regexpReplace/replace';
 import { makeProcessor } from '../services/regexpReplace/processor';

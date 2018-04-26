@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import { context } from '../src/services/common/context';
+import { context } from '../services/common/context';
 export class UI extends vscode.Disposable implements vscode.TextDocumentContentProvider {
     Emittor: vscode.EventEmitter<vscode.Uri>;
     onDidChange: vscode.Event<vscode.Uri>;

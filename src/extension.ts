@@ -4,7 +4,7 @@ import * as vscode from 'vscode';
 import { config } from './services/common/config';
 import { CommandReplace, CommandDoReplaceUI } from './commands/replace';
 import { setContext } from './services/common/context';
-import { uiMain } from '../ui/main/uiMain';
+import { uiMain } from './ui/uiMain';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
