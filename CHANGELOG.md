@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.0.5
+
+- Improvement: Behaves similar to vscode for those invalid match indexes
+
 ## 0.0.4
 
 - Many code optimizations
