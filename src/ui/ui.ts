@@ -1,35 +1,34 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import { context } from '../services/common/context';
 export class UI extends vscode.Disposable implements vscode.TextDocumentContentProvider {
     Emittor: vscode.EventEmitter<vscode.Uri>;
     onDidChange: vscode.Event<vscode.Uri>;
     _uri: vscode.Uri;
+    _base: string;
     _file: string;
     _title: string;
     _content: string;
 
     private _disposable: vscode.Disposable[] = [];
 
-    constructor(uri: vscode.Uri, file: string, title: string) {
+    constructor(uri: vscode.Uri, base: string, file: string, title: string) {
         super(() => this.dispose());
         this.Emittor = new vscode.EventEmitter<vscode.Uri>();
         this.onDidChange = this.Emittor.event;
         this._uri = uri;
         this._title = title;
-        this._file = file;
+        this._base = base;
+        this._file = path.isAbsolute(file) ? file : path.join(base, file);
         this._disposable.push(
             vscode.workspace.registerTextDocumentContentProvider(uri.scheme, this)
         );
     }
     Load(env: any) {
-        if (!context) return;
-        if (!path.isAbsolute(this._file)) this._file = path.join(context.extensionPath, this._file);
         this._content = this.evalHtml(fs.readFileSync(this._file).toString(), env);
     }
     private evalHtml(html: string, envObj: any): string {
-        let extRoot: string = context.extensionPath;
+        let base: string = this._base;
         let env = JSON.stringify(envObj);
         return eval('`' + html + '`');
     }
