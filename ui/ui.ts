@@ -48,12 +48,7 @@ export class UI extends vscode.Disposable implements vscode.TextDocumentContentP
     }
     show(env: any) {
         this.Load(env || {});
-        return this.showOrActive().then(
-            success => { },
-            reason => {
-                vscode.window.showErrorMessage(reason);
-            }
-        );
+        return this.showOrActive();
     }
     private showOrActive() {
         return vscode.commands.executeCommand('vscode.previewHtml', this._uri, vscode.ViewColumn.Two, this._title);

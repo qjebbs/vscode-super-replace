@@ -13,7 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(
         config, uiMain,
         new CommandReplace(),
-        new CommandDoReplaceUI,
+        new CommandDoReplaceUI(),
     );
 }
 
