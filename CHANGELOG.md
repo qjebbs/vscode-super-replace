@@ -1,8 +1,12 @@
 # Change Log
 
+## 0.0.4
+
+- Many code optimizations
+
 ## 0.0.3
 
-Fix: Detect & avoid "prevented webview navigation"
+- Fix: Detect & avoid "prevented webview navigation"
 
 ## 0.0.2
 
