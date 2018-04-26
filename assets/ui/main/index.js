@@ -22,23 +22,15 @@ window.addEventListener("load", () => {
     state = JSON.parse(document.getElementById("state").innerHTML);
     let btnDoReplace = document.getElementById("doReplace");
     btnDoReplace.addEventListener("click", doReplace);
-    if (!state.reportingOK) reportingLoop(); // detect prevented excuting by vscode in a few cases
 });
-
-function reportingLoop(idx) {
-    if (!idx) idx = 0;
-    execute({
-        reporting: idx
-    });
-    setTimeout(() => {
-        reportingLoop(++idx);
-    }, 100);
-}
 
 function execute(arg) {
     let args = JSON.stringify(arg);
     let uri = encodeURI('command:superReplace.doReplace?' + args);
     sendMsg.attributes["href"].value = uri;
+    // sendMsg.href = uri;
+    // console.log(!!sendMsg.tagName && sendMsg.tagName.toLowerCase() === 'a' && !!sendMsg.href,
+    //     sendMsg.tagName, sendMsg.tagName.toLowerCase(), sendMsg.href)
     // console.log(uri);
     sendMsg.click();
 }
