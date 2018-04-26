@@ -1,4 +1,4 @@
-var templates = {
+let templates = {
     "googleTranslate": `// gtranslate returns a function that translates the match text.
 // change the "en" and "zh-cn" to whatever source and target language you want
 // don't forget to configurate "superReplace.googleApiKey"
@@ -6,29 +6,37 @@ gtranslate("en","zh-cn")`,
     "uppercase": "s=>s.toUpperCase()"
 }
 
+let sendMsg;
+let textFind;
+let textReplace;
+let textFunc;
+let radRngSelection;
+
 window.addEventListener("load", () => {
     sendMsg = document.getElementById("sendMsg");
     textFind = document.getElementById("textFind");
     textReplace = document.getElementById("textReplace");
     textFunc = document.getElementById("textFunc");
     radRngSelection = document.getElementById("radRngSelection");
-    btnDoReplace = document.getElementById("doReplace");
+    let btnDoReplace = document.getElementById("doReplace");
     btnDoReplace.addEventListener("click", doReplace);
 });
 
+function execute(arg) {
+    let args = JSON.stringify(arg);
+    let uri = encodeURI('command:superReplace.doReplace?' + args);
+    sendMsg.attributes["href"].value = uri;
+    console.log(uri);
+    sendMsg.click();
+}
+
 function doReplace() {
-    if (sendMsg) {
-        let args = JSON.stringify({
-            find: textFind.value,
-            replace: textReplace.value,
-            func: textFunc.value,
-            range: radRngSelection.checked ? 0 : 1
-        });
-        let uri = encodeURI('command:superReplace.doReplace?' + args);
-        sendMsg.attributes["href"].value = uri;
-        // console.log(sendMsg.attributes["href"].value);
-        sendMsg.click();
-    }
+    if (sendMsg) execute({
+        find: textFind.value,
+        replace: textReplace.value,
+        func: textFunc.value,
+        range: radRngSelection.checked ? 0 : 1
+    });
 }
 
 
