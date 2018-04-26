@@ -33,15 +33,30 @@ export class UI extends vscode.Disposable implements vscode.TextDocumentContentP
         let env = JSON.stringify(envObj);
         return eval('`' + html + '`');
     }
+    reOpen(env: any) {
+        return new Promise((resolve, reject) => {
+            this.showOrActive().then(
+                success => {
+                    vscode.commands.executeCommand('workbench.action.closeActiveEditor').then(
+                        success => this.show(env),
+                        reason => reject(reason)
+                    )
+                },
+                reason => reason => reject(reason)
+            );
+        });
+    }
     show(env: any) {
         this.Load(env || {});
-        vscode.commands.executeCommand('vscode.previewHtml', this._uri, vscode.ViewColumn.Two, this._title)
-            .then(
-                success => undefined,
-                reason => {
-                    vscode.window.showErrorMessage(reason);
-                }
-            );
+        return this.showOrActive().then(
+            success => { },
+            reason => {
+                vscode.window.showErrorMessage(reason);
+            }
+        );
+    }
+    private showOrActive() {
+        return vscode.commands.executeCommand('vscode.previewHtml', this._uri, vscode.ViewColumn.Two, this._title);
     }
     refresh(env: any) {
         this.Load(env || {});

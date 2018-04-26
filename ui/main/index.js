@@ -11,6 +11,7 @@ let textFind;
 let textReplace;
 let textFunc;
 let radRngSelection;
+let state;
 
 window.addEventListener("load", () => {
     sendMsg = document.getElementById("sendMsg");
@@ -18,15 +19,27 @@ window.addEventListener("load", () => {
     textReplace = document.getElementById("textReplace");
     textFunc = document.getElementById("textFunc");
     radRngSelection = document.getElementById("radRngSelection");
+    state = JSON.parse(document.getElementById("state").innerHTML);
     let btnDoReplace = document.getElementById("doReplace");
     btnDoReplace.addEventListener("click", doReplace);
+    if (!state.reportingOK) reportingLoop(); // detect prevented excuting by vscode in a few cases
 });
+
+function reportingLoop(idx) {
+    if (!idx) idx = 0;
+    execute({
+        reporting: idx
+    });
+    setTimeout(() => {
+        reportingLoop(++idx);
+    }, 100);
+}
 
 function execute(arg) {
     let args = JSON.stringify(arg);
     let uri = encodeURI('command:superReplace.doReplace?' + args);
     sendMsg.attributes["href"].value = uri;
-    console.log(uri);
+    // console.log(uri);
     sendMsg.click();
 }
 
