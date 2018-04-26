@@ -18,23 +18,23 @@ export class UI extends vscode.Disposable implements vscode.TextDocumentContentP
         this.onDidChange = this.Emittor.event;
         this._uri = uri;
         this._title = title;
-        this.Load(file);
         this._disposable.push(
             vscode.workspace.registerTextDocumentContentProvider(uri.scheme, this)
         );
     }
-    Load(file: string) {
+    Load(file: string, env: any) {
         this._file = file;
         if (!context) return;
         if (!path.isAbsolute(this._file)) this._file = path.join(context.extensionPath, this._file);
-        this._content = this.evalHtml(fs.readFileSync(this._file).toString());
+        this._content = this.evalHtml(fs.readFileSync(this._file).toString(), env);
     }
-    private evalHtml(html): string {
+    private evalHtml(html: string, envObj: any): string {
         let extRoot: string = context.extensionPath;
+        let env = JSON.stringify(envObj);
         return eval('`' + html + '`');
     }
-    show() {
-        if (!this._content) this.Load(this._file);
+    show(env: any) {
+        this.Load(this._file, env || {});
         vscode.commands.executeCommand('vscode.previewHtml', this._uri, vscode.ViewColumn.Two, this._title)
             .then(
                 success => undefined,
@@ -43,8 +43,12 @@ export class UI extends vscode.Disposable implements vscode.TextDocumentContentP
                 }
             );
     }
+    refresh(env: any) {
+        this.Load(this._file, env || {});
+        this.Emittor.fire(this._uri);
+    }
     provideTextDocumentContent(uri: vscode.Uri, token: vscode.CancellationToken): string {
-        return this._content
+        return this._content;
     }
     dispose() {
         this._disposable.length && this._disposable.map(d => d.dispose());
