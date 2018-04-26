@@ -18,12 +18,12 @@ export class UI extends vscode.Disposable implements vscode.TextDocumentContentP
         this.onDidChange = this.Emittor.event;
         this._uri = uri;
         this._title = title;
+        this._file = file;
         this._disposable.push(
             vscode.workspace.registerTextDocumentContentProvider(uri.scheme, this)
         );
     }
-    Load(file: string, env: any) {
-        this._file = file;
+    Load(env: any) {
         if (!context) return;
         if (!path.isAbsolute(this._file)) this._file = path.join(context.extensionPath, this._file);
         this._content = this.evalHtml(fs.readFileSync(this._file).toString(), env);
@@ -34,7 +34,7 @@ export class UI extends vscode.Disposable implements vscode.TextDocumentContentP
         return eval('`' + html + '`');
     }
     show(env: any) {
-        this.Load(this._file, env || {});
+        this.Load(env || {});
         vscode.commands.executeCommand('vscode.previewHtml', this._uri, vscode.ViewColumn.Two, this._title)
             .then(
                 success => undefined,
@@ -44,7 +44,7 @@ export class UI extends vscode.Disposable implements vscode.TextDocumentContentP
             );
     }
     refresh(env: any) {
-        this.Load(this._file, env || {});
+        this.Load(env || {});
         this.Emittor.fire(this._uri);
     }
     provideTextDocumentContent(uri: vscode.Uri, token: vscode.CancellationToken): string {
