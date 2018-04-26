@@ -3,7 +3,7 @@
     "displayName": "Super Replace - Translate, text process and more, with infinite possibilities",
     "description": "Do translations and any text transformations with regex replace!",
     "icon": "images/icon.png",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "publisher": "jebbs",
     "engines": {
         "vscode": "^1.11.0"
