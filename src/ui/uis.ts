@@ -7,8 +7,8 @@ export var uiMain: UI;
 contextManager.addInitiatedListener(ctx => {
     uiMain = new UI(
         vscode.Uri.parse("superReplace://main"),
-        ctx.asAbsolutePath("ui/main"),
+        ctx.asAbsolutePath("assets/ui/main"),
         "index.htm",
         "Super Replace",
     );
-}) 
+});

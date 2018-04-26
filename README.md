@@ -8,7 +8,7 @@ Super Replace is an advanced regex replace tool which allows you specify additio
 
 The following is an example that translate matched texts to Chinese.
 
-![gtrans](images/gtrans-demo.gif)
+![gtrans](assets/images/gtrans-demo.gif)
 
 ## Quick Tutorial
 

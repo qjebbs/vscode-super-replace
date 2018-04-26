@@ -2,7 +2,7 @@
     "name": "super-replace",
     "displayName": "Super Replace - Translate, text process and more, with infinite possibilities",
     "description": "Do translations and any text transformations with regex replace!",
-    "icon": "images/icon.png",
+    "icon": "assets/images/icon.png",
     "version": "0.0.3",
     "publisher": "jebbs",
     "engines": {
