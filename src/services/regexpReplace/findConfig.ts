@@ -10,7 +10,6 @@ export function getFindConfig(find: string, rangTexts: IRangeText[], replaceConf
         if (c.type == IReplaceFillType.processed) p.push(c.index);
         return p;
     }, <number[]>[]);
-    let maxIndex = Math.max(...indexes);
 
     let reg = new RegExp(find, "g");
     let collectedFinds: IFindMatches[] = [];
@@ -21,9 +20,6 @@ export function getFindConfig(find: string, rangTexts: IRangeText[], replaceConf
         let subs: string[] = [];
         let pos = 0;
         while (matches = reg.exec(rngText.text)) {
-            if (maxIndex > matches.length - 1) {
-                throw new Error("Sub match index out of bound. Please Check your replace text!");
-            }
             lineMatches.push(matches);
             // collect needed sub matched to translate
             indexes.map(i => stringsSet.add(matches[i]));
@@ -42,7 +38,8 @@ export function getFindConfig(find: string, rangTexts: IRangeText[], replaceConf
             restSubStrings: subs
         });
     }
-    strings = Array.from(stringsSet);
+    // convert to array and remove undefined values from invalid sub match indexes
+    strings = Array.from(stringsSet).filter(s => s !== undefined);
     return <IFindConfig>{
         collectedMatches: collectedFinds,
         subMatchesToTransform: strings,
