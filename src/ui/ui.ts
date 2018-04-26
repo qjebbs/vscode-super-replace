@@ -28,9 +28,18 @@ export class UI extends vscode.Disposable implements vscode.TextDocumentContentP
         this._content = this.evalHtml(fs.readFileSync(this._file).toString(), env);
     }
     private evalHtml(html: string, envObj: any): string {
+        let linkReg = /(src|href)\s*=\s*([`"'])(.+?)\2/ig;
+        let excludeReg = /^(\w+:|#)/i; // exclude scheme-uri and anchors
         let base: string = this._base;
         let env = JSON.stringify(envObj);
-        return eval('`' + html + '`');
+        let result: string = eval('`' + html + '`');
+        // convert relative "src", "href" paths to absolute
+        return result.replace(linkReg, (match, ...subs) => {
+            let uri = subs[2];
+            if (excludeReg.test(uri)) return match;
+            if (!path.isAbsolute(uri)) uri = path.join(base, uri);
+            return `${subs[0]}=${subs[1]}${uri}${subs[1]}`;
+        });
     }
     reOpen(env: any) {
         return new Promise((resolve, reject) => {
