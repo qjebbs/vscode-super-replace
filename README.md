@@ -12,15 +12,26 @@ The following is an example that translate matched texts to Chinese.
 
 ## Quick Tutorial
 
-we know that, with regexp replace, we can use `$<index>` like `$0`, `$1` in replace text, which means whole match (`$0`), or first sub match (`$1`).
+### Replace Tutorial
+
+> To open the Super Replace tool, find and exectue command `Super Replace: Open Replace Window...`.
+
+We know that, with regexp replace, we can use `$<index>` like `$0`, `$1` in replace text, which means whole match (`$0`), or first sub match (`$1`).
 
 Super Replace extends the capability by using `$$<index>` like `$$0`, `$$1`, which means processed whole match (`$$0`), or processed first sub match (`$$1`).
 
-And finally, the processing function is for processing the sub matches to processed sub matches.
+The foregoing processed matches are outputs of the function given here.
+It recieve sub matches as input, and could be either 
+"(texts: string[])=>strings[]" or "(text: string)=>string".
 
 For example, find `\w+` replace `$$0` function `s=>s.toUpperCase()` will transform words in the document to upper case.
 
-> To open the Super Replace tool, find and exectue command `Super Replace: Open Replace Window...`.
+### Extract Tutorial
+
+Super replace provides another action called `Extract`.
+
+It's useful while extracting matched texts from mass texts. To simply understand it,
+we can take it as an action that remove all unmatched texts after replace.
 
 ## Requirements
 
