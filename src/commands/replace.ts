@@ -3,11 +3,9 @@ import { uiMain } from '../ui/uis';
 import * as vscode from 'vscode';
 import { doReplace } from '../services/regexpReplace/replace';
 
-let state = {};
-
 export class CommandDoReplaceUI extends Command {
     async execute() {
-        uiMain.show(state);
+        uiMain.show();
     }
     constructor() {
         super("superReplace.replaceWindow");
@@ -17,7 +15,6 @@ export class CommandDoReplaceUI extends Command {
 export class CommandReplace extends Command {
     async execute(...args: any[]) {
         let option = args[0];
-        // console.log(args);
         let find = option.find;
         let replace = option.replace;
         let func = option.func;

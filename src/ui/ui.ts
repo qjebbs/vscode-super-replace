@@ -24,51 +24,43 @@ export class UI extends vscode.Disposable implements vscode.TextDocumentContentP
             vscode.workspace.registerTextDocumentContentProvider(uri.scheme, this)
         );
     }
-    Load(env: any) {
+    provideTextDocumentContent(uri: vscode.Uri, token: vscode.CancellationToken): string {
+        return this._content;
+    }
+    dispose() {
+        this._disposable.length && this._disposable.map(d => d.dispose());
+    }
+    show(env?: any) {
+        this.loadFile(env || {});
+        return this.showOrActive();
+    }
+    close() {
+        return this.showOrActive().then(
+            success => vscode.commands.executeCommand('workbench.action.closeActiveEditor'),
+            reason => Promise.reject(reason)
+        );
+    }
+    refresh(env?: any) {
+        this.loadFile(env || {});
+        this.Emittor.fire(this._uri);
+    }
+    private loadFile(env: any) {
         this._content = this.evalHtml(fs.readFileSync(this._file).toString(), env);
     }
     private evalHtml(html: string, envObj: any): string {
         let linkReg = /(src|href)\s*=\s*([`"'])(.+?)\2/ig;
-        let excludeReg = /^(\w+:|#)/i; // exclude scheme-uri and anchors
         let base: string = this._base;
         let env = JSON.stringify(envObj);
         let result: string = eval('`' + html + '`');
         // convert relative "src", "href" paths to absolute
         return result.replace(linkReg, (match, ...subs) => {
             let uri = subs[2];
-            if (excludeReg.test(uri)) return match;
             if (!path.isAbsolute(uri)) uri = path.join(base, uri);
+            if (!fs.existsSync(uri)) return match;
             return `${subs[0]}=${subs[1]}${uri}${subs[1]}`;
         });
     }
-    reOpen(env: any) {
-        return new Promise((resolve, reject) => {
-            this.showOrActive().then(
-                success => {
-                    vscode.commands.executeCommand('workbench.action.closeActiveEditor').then(
-                        success => this.show(env),
-                        reason => reject(reason)
-                    )
-                },
-                reason => reason => reject(reason)
-            );
-        });
-    }
-    show(env: any) {
-        this.Load(env || {});
-        return this.showOrActive();
-    }
     private showOrActive() {
         return vscode.commands.executeCommand('vscode.previewHtml', this._uri, vscode.ViewColumn.Two, this._title);
-    }
-    refresh(env: any) {
-        this.Load(env || {});
-        this.Emittor.fire(this._uri);
-    }
-    provideTextDocumentContent(uri: vscode.Uri, token: vscode.CancellationToken): string {
-        return this._content;
-    }
-    dispose() {
-        this._disposable.length && this._disposable.map(d => d.dispose());
     }
 }
