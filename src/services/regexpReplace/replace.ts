@@ -11,6 +11,7 @@ export async function doReplace(
     range: vscode.Range,
     find: string,
     replace: string,
+    isExtract: boolean,
     processor: (strings: string[], ...args: string[]) => Promise<IProcessReulst>,
     ...processorArgs: string[]
 );
@@ -19,6 +20,7 @@ export async function doReplace(
     range: vscode.Range,
     find: string,
     replace: string,
+    isExtract: boolean,
     func: string,
     ...processorArgs: string[]
 );
@@ -27,6 +29,7 @@ export async function doReplace(
     range: vscode.Range,
     find: string,
     replace: string,
+    isExtract: boolean,
     ...para: any[],
 ) {
     try {
@@ -81,19 +84,25 @@ export async function doReplace(
         let edits = findConfig.collectedMatches.map((lineMatches, i) => {
             if (lineMatches.restSubStrings.length - lineMatches.matches.length !== 1)
                 throw new Error("查找结果子串与匹配数量不合预期！");
-            if (!lineMatches.matches.length) return undefined;
-            // let text = textLine.text;
             let rng = lineMatches.range;
-            let text = lineMatches.matches.reduce((p, m, i) => {
-                let rep = CalcReplace(replaceConfig, m, dict);
-                return p + rep + lineMatches.restSubStrings[i + 1];
-            }, lineMatches.restSubStrings[0]);
-
+            let text = "";
+            if (isExtract) {
+                text = lineMatches.matches.reduce((p, m, i) => {
+                    return p + '\n' + CalcReplace(replaceConfig, m, dict);
+                }, "").trim();
+            } else {
+                if (!lineMatches.matches.length) return undefined;
+                // let text = textLine.text;
+                text = lineMatches.matches.reduce((p, m, i) => {
+                    let rep = CalcReplace(replaceConfig, m, dict);
+                    return p + rep + lineMatches.restSubStrings[i + 1];
+                }, lineMatches.restSubStrings[0]);
+            }
             return <RangeReplace>{
                 range: rng,
                 replace: text,
             }
-        })
+        }).filter(e => e !== undefined);
         editTextDocument(document, edits);
     } catch (error) {
         return Promise.reject(error);

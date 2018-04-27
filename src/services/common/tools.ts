@@ -31,7 +31,7 @@ export async function editTextDocument(document: vscode.TextDocument, edits: Ran
     let editor = await vscode.window.showTextDocument(document);
     editor.edit(e => {
         edits.map(edit => {
-            if (!edit || !edit.range || !edit.replace) return;
+            if (!edit || !edit.range || edit.replace === undefined) return;
             e.replace(edit.range, edit.replace);
         })
     })

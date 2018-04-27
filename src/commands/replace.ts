@@ -19,13 +19,14 @@ export class CommandReplace extends Command {
         let replace = option.replace;
         let func = option.func;
         let range = option.range;
+        let isExtract = option.isExtract;
         if (!find) {
             vscode.window.showInformationMessage("Find pattern cannot be empty!");
             return;
         }
         let editors = vscode.window.visibleTextEditors;
         let editor = editors[0];
-        await doReplace(editor, range ? undefined : editor.selection, find, replace, func);
+        await doReplace(editor, range ? undefined : editor.selection, find, replace, isExtract, func);
     }
     constructor() {
         super("superReplace.doReplace");

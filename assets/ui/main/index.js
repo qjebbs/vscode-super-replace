@@ -19,8 +19,8 @@ window.addEventListener("load", () => {
     textReplace = document.getElementById("textReplace");
     textFunc = document.getElementById("textFunc");
     radRngSelection = document.getElementById("radRngSelection");
-    let btnDoReplace = document.getElementById("doReplace");
-    btnDoReplace.addEventListener("click", doReplace);
+    document.getElementById("doReplace").addEventListener("click", doReplace);
+    document.getElementById("doExtract").addEventListener("click", doExtract);
 });
 
 function execute(arg) {
@@ -36,7 +36,18 @@ function doReplace() {
         find: textFind.value,
         replace: textReplace.value,
         func: textFunc.value,
-        range: radRngSelection.checked ? 0 : 1
+        range: radRngSelection.checked ? 0 : 1,
+        isExtract: false
+    });
+}
+
+function doExtract() {
+    if (sendMsg) execute({
+        find: textFind.value,
+        replace: textReplace.value,
+        func: textFunc.value,
+        range: radRngSelection.checked ? 0 : 1,
+        isExtract: true
     });
 }
 
