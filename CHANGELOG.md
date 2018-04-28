@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.1.1
+
+- Improvement: Improved extract reulst.
+- Improvement: Defalt replace pattern `$0` for extract if not given.
+
 ## 0.1.0
 
 - New Feature: add extract action.

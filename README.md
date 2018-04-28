@@ -6,9 +6,13 @@ Do translations and any text transformations with regex replace!
 
 Super Replace is an advanced regex replace tool which allows you specify additional text processing function when replace.
 
-The following is an example that translate matched texts to Chinese.
+**Demo 1**: Translate matched texts to Chinese.
 
 ![gtrans](assets/images/gtrans-demo.gif)
+
+**Demo 2**: Extract option texts from HTML source code, and convert them to lower case.
+
+![extract](assets/images/extract-demo.gif)
 
 ## Quick Tutorial
 
