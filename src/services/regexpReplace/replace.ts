@@ -87,12 +87,21 @@ export async function doReplace(
             let rng = lineMatches.range;
             let text = "";
             if (isExtract) {
+                let lineText = document.getText(rng);
+                let end: vscode.Position;
+                if (rng.end.character < lineText.length)
+                    end = rng.end.translate(0, 1);
+                else
+                    end = new vscode.Position(rng.end.line + 1, 0);
+                rng = new vscode.Range(
+                    rng.start,
+                    end
+                );
                 text = lineMatches.matches.reduce((p, m, i) => {
-                    return p + '\n' + CalcReplace(replaceConfig, m, dict);
-                }, "").trim();
+                    return p + CalcReplace(replaceConfig, m, dict) + '\n';
+                }, "");
             } else {
                 if (!lineMatches.matches.length) return undefined;
-                // let text = textLine.text;
                 text = lineMatches.matches.reduce((p, m, i) => {
                     let rep = CalcReplace(replaceConfig, m, dict);
                     return p + rep + lineMatches.restSubStrings[i + 1];
