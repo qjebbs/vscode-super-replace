@@ -42,9 +42,10 @@ function doReplace() {
 }
 
 function doExtract() {
+    let rep = textReplace.value;
     if (sendMsg) execute({
         find: textFind.value,
-        replace: textReplace.value,
+        replace: rep ? rep : "$0",
         func: textFunc.value,
         range: radRngSelection.checked ? 0 : 1,
         isExtract: true
