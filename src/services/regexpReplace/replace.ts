@@ -98,7 +98,8 @@ export async function doReplace(
                     end
                 );
                 text = lineMatches.matches.reduce((p, m, i) => {
-                    return p + CalcReplace(replaceConfig, m, dict) + '\n';
+                    let r = CalcReplace(replaceConfig, m, dict);
+                    return p + (r ? r + '\n' : "");
                 }, "");
             } else {
                 if (!lineMatches.matches.length) return undefined;
