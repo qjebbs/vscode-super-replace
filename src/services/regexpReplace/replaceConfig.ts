@@ -79,11 +79,15 @@ export function CalcReplace(replace: ReplaceConfig, matches: RegExpExecArray, pr
     }
     return replace.indexes.reduce((p, c, i) => {
         let fillText = "";
-        let org = matches[c.index];
+        let org = undefined;
+        if (c.index < matches.length) {
+            org = matches[c.index];
+            if (org === undefined) org = "";
+        }
         if (c.type == IReplaceFillType.origin) {
-            fillText = org == undefined ? `$${c.index}` : org;
+            fillText = org === undefined ? `$${c.index}` : org;
         } else {
-            fillText = org == undefined ? `$$${c.index}` : processedDict[org];
+            fillText = org === undefined ? `$$${c.index}` : processedDict[org];
         }
         return p + fillText + replace.restSubStrings[i + 1];
     }, replace.restSubStrings[0]);
