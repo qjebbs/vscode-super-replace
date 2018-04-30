@@ -25,7 +25,7 @@ window.addEventListener("load", () => {
 
 function execute(arg) {
     let args = JSON.stringify(arg);
-    let uri = encodeURI('command:superReplace.doReplace?' + args);
+    let uri = 'command:superReplace.doReplace?' + encodeURIComponent(args);
     sendMsg.attributes["href"].value = uri;
     // sendMsg.href = uri;
     sendMsg.click();
