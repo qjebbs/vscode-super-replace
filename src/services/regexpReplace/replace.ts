@@ -81,38 +81,36 @@ export async function doReplace(
             }
             dict = result.processedDict;
         }
-        let edits = findConfig.collectedMatches.map((lineMatches, i) => {
-            if (lineMatches.restSubStrings.length - lineMatches.matches.length !== 1)
-                throw new Error("查找结果子串与匹配数量不合预期！");
-            let rng = lineMatches.range;
-            let text = "";
-            if (isExtract) {
-                let lineText = document.getText(rng);
-                let end: vscode.Position;
-                if (rng.end.character < lineText.length)
-                    end = rng.end.translate(0, 1);
-                else
-                    end = new vscode.Position(rng.end.line + 1, 0);
-                rng = new vscode.Range(
-                    rng.start,
-                    end
-                );
-                text = lineMatches.matches.reduce((p, m, i) => {
-                    let r = CalcReplace(replaceConfig, m, dict);
-                    return p + (r ? r + '\n' : "");
-                }, "");
-            } else {
+        let edits: RangeReplace[];
+        if (isExtract) {
+            let extracted = findConfig.collectedMatches.reduce(
+                (p, lineMatches) => {
+                    let matches = lineMatches.matches.reduce((p, m, i) => {
+                        let r = CalcReplace(replaceConfig, m, dict);
+                        return p + (r ? r + '\n' : "");
+                    }, "").trim();
+                    return p + '\n' + matches;
+                },
+                ""
+            ).trim();
+            edits = [<RangeReplace>{ range: range, replace: extracted }];
+        } else {
+            edits = findConfig.collectedMatches.map((lineMatches, i) => {
+                if (lineMatches.restSubStrings.length - lineMatches.matches.length !== 1)
+                    throw new Error("查找结果子串与匹配数量不合预期！");
+                let rng = lineMatches.range;
+                let text = "";
                 if (!lineMatches.matches.length) return undefined;
                 text = lineMatches.matches.reduce((p, m, i) => {
                     let rep = CalcReplace(replaceConfig, m, dict);
                     return p + rep + lineMatches.restSubStrings[i + 1];
                 }, lineMatches.restSubStrings[0]);
-            }
-            return <RangeReplace>{
-                range: rng,
-                replace: text,
-            }
-        }).filter(e => e !== undefined);
+                return <RangeReplace>{
+                    range: rng,
+                    replace: text,
+                }
+            }).filter(e => e !== undefined);
+        }
         editTextDocument(document, edits);
     } catch (error) {
         return Promise.reject(error);
