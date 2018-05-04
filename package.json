@@ -6,16 +6,16 @@
     "version": "0.1.1",
     "publisher": "jebbs",
     "engines": {
-        "vscode": "^1.11.0"
+        "vscode": "^1.23.0"
     },
     "license": "SEE LICENSE IN LICENSE.txt",
     "bugs": {
-      "url": "https://github.com/qjebbs/vscode-super-replace/issues"
+        "url": "https://github.com/qjebbs/vscode-super-replace/issues"
     },
     "homepage": "https://github.com/qjebbs/vscode-super-replace",
     "repository": {
-      "type": "git",
-      "url": "https://github.com/qjebbs/vscode-super-replace.git"
+        "type": "git",
+        "url": "https://github.com/qjebbs/vscode-super-replace.git"
     },
     "categories": [
         "Other"
@@ -32,13 +32,13 @@
                 "category": "Super Replace"
             }
         ],
-        "configuration":[
+        "configuration": [
             {
                 "title": "Super Replace Configuration",
                 "properties": {
-                    "superReplace.googleApiKey":{
-                        "type":"string",
-                        "default":"",
+                    "superReplace.googleApiKey": {
+                        "type": "string",
+                        "default": "",
                         "description": "The Google API key needed by the gtranslate function",
                         "scope": "window"
                     }
@@ -53,13 +53,16 @@
         "build": "node ./build.js"
     },
     "devDependencies": {
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.6",
-        "tslint": "^5.8.0",
+        "@types/mocha": "^2.2.42",
         "@types/node": "^7.0.43",
-        "@types/mocha": "^2.2.42"
+        "tslint": "^5.8.0",
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.17"
     },
     "dependencies": {
-        "google-translate": "^2.1.0"
+        "google-translate": "^2.1.0",
+        "npm": "^6.0.0",
+        "to": "^0.2.9",
+        "update": "^0.7.4"
     }
 }
