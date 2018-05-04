@@ -39,10 +39,11 @@ export async function doReplace(
         let document = editor.document;
 
         let confs = analysis(document, ranges, find, replace);
-        let strings = confs.reduce((p, c) => {
-            p.push(...c.findConfig.subMatchesToTransform);
+        let stringsSet = confs.reduce((p, c) => {
+            c.findConfig.subMatchesToTransform.map(s => p.add(s));
             return p;
-        }, <string[]>[]);
+        }, new Set<string>([]));
+        let strings = Array.from(stringsSet);
         let dict = await processMatches(strings, ...para);
         let edits = confs.reduce((p, c) => {
             p.push(
