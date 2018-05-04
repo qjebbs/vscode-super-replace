@@ -6,7 +6,7 @@ gtranslate("en","zh-cn")`,
     "uppercase": "s=>s.toUpperCase()"
 }
 
-let sendMsg;
+const vscode = acquireVsCodeApi();
 let textFind;
 let textReplace;
 let textFunc;
@@ -14,7 +14,6 @@ let radRngSelection;
 let state;
 
 window.addEventListener("load", () => {
-    sendMsg = document.getElementById("sendMsg");
     textFind = document.getElementById("textFind");
     textReplace = document.getElementById("textReplace");
     textFunc = document.getElementById("textFunc");
@@ -23,35 +22,26 @@ window.addEventListener("load", () => {
     document.getElementById("doExtract").addEventListener("click", doExtract);
 });
 
-function execute(arg) {
-    let args = JSON.stringify(arg);
-    let uri = 'command:superReplace.doReplace?' + encodeURIComponent(args);
-    sendMsg.attributes["href"].value = uri;
-    // sendMsg.href = uri;
-    sendMsg.click();
-}
-
 function doReplace() {
-    if (sendMsg) execute({
+    vscode.postMessage({
         find: textFind.value,
         replace: textReplace.value,
         func: textFunc.value,
-        range: radRngSelection.checked ? 0 : 1,
+        selectionOnly: radRngSelection.checked,
         isExtract: false
     });
 }
 
 function doExtract() {
     let rep = textReplace.value;
-    if (sendMsg) execute({
+    vscode.postMessage({
         find: textFind.value,
         replace: rep ? rep : "$0",
         func: textFunc.value,
-        range: radRngSelection.checked ? 0 : 1,
+        selectionOnly: radRngSelection.checked,
         isExtract: true
     });
 }
-
 
 function onListClick(e) {
     let tmpl = "";
