@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { IProcessReulst } from './interfaces';
 import { replaceWorker } from './worker';
 
-export async function superReplace(
+export async function superExtract(
     editor: vscode.TextEditor,
     scope: vscode.Range[] | vscode.TextDocument,
     find: string,
@@ -10,7 +10,7 @@ export async function superReplace(
     processor: (strings: string[], ...args: string[]) => Promise<IProcessReulst>,
     ...processorArgs: string[]
 );
-export async function superReplace(
+export async function superExtract(
     editor: vscode.TextEditor,
     scope: vscode.Range[] | vscode.TextDocument,
     find: string,
@@ -18,7 +18,7 @@ export async function superReplace(
     func: string,
     ...processorArgs: string[]
 );
-export async function superReplace(
+export async function superExtract(
     editor: vscode.TextEditor,
     scope: vscode.Range[] | vscode.TextDocument,
     find: string,
@@ -26,5 +26,5 @@ export async function superReplace(
     func: any,
     ...para: any[],
 ) {
-    await replaceWorker(editor, scope, find, replace, false, func, ...para);
+    await replaceWorker(editor, scope, find, replace, true, func, ...para);
 }

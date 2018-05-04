@@ -1,7 +1,8 @@
 import { UI } from "./ui";
 import * as vscode from 'vscode';
 import { contextManager } from '../services/common/context';
-import { doReplace } from "../services/regexpReplace/replace";
+import { superReplace } from "../services/regexpReplace/replace";
+import { superExtract } from "../services/regexpReplace/extract";
 
 export var uiMain: UI;
 
@@ -32,12 +33,13 @@ async function replace(option: ReplaceOption) {
         return p || !s.isEmpty;
     }, false);
 
-    await doReplace(
+    let worker = option.isExtract ? superExtract : superReplace;
+
+    await worker(
         editor,
         hasSelection ? editor.selections : editor.document,
         option.find,
         option.replace,
-        option.isExtract,
         option.func
     );
 }
