@@ -8,7 +8,7 @@ import { makeProcessor } from './processor';
 
 export async function doReplace(
     editor: vscode.TextEditor,
-    range: vscode.Range,
+    scope: vscode.Range | vscode.TextDocument,
     find: string,
     replace: string,
     isExtract: boolean,
@@ -17,7 +17,7 @@ export async function doReplace(
 );
 export async function doReplace(
     editor: vscode.TextEditor,
-    range: vscode.Range,
+    scope: vscode.Range | vscode.TextDocument,
     find: string,
     replace: string,
     isExtract: boolean,
@@ -26,19 +26,19 @@ export async function doReplace(
 );
 export async function doReplace(
     editor: vscode.TextEditor,
-    range: vscode.Range,
+    scope: vscode.Range | vscode.TextDocument,
     find: string,
     replace: string,
     isExtract: boolean,
     ...para: any[],
 ) {
     try {
-        if (!find) return;
-        let document = editor.document;
-        if (!range) range = documentToRange(document);
+        if (!find || !scope) return;
+        let range: vscode.Range = scope instanceof vscode.Range ? scope : documentToRange(scope);
         if (range.isEmpty) return;
         let lineRanges: IRangeText[] = [];
 
+        let document = editor.document;
         for (let i = range.start.line; i <= range.end.line; i++) {
             let rng = document.lineAt(i).range.intersection(range);
             if (!rng) continue;
