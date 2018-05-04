@@ -18,7 +18,6 @@ interface ReplaceOption {
     find: string,
     replace: string,
     func: string,
-    selectionOnly: boolean,
     isExtract: boolean,
 }
 
@@ -29,9 +28,13 @@ async function replace(option: ReplaceOption) {
     }
     let editors = vscode.window.visibleTextEditors;
     let editor = editors[0];
+    let hasSelection = editor.selections.reduce((p, s) => {
+        return p || !s.isEmpty;
+    }, false);
+
     await doReplace(
         editor,
-        option.selectionOnly ? editor.selections : editor.document,
+        hasSelection ? editor.selections : editor.document,
         option.find,
         option.replace,
         option.isExtract,
