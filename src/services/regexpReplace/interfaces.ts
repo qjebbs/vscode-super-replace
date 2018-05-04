@@ -42,3 +42,9 @@ export interface IProcessReulst {
     processedDict: IProcessedResultDict,
     error: IProcessError,
 }
+
+export interface IAnalysisResult {
+    range: vscode.Range,
+    replaceConfig: ReplaceConfig,
+    findConfig: IFindConfig,
+}

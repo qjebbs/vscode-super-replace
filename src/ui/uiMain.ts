@@ -31,7 +31,7 @@ async function replace(option: ReplaceOption) {
     let editor = editors[0];
     await doReplace(
         editor,
-        option.selectionOnly ? editor.selection : editor.document,
+        option.selectionOnly ? editor.selections : editor.document,
         option.find,
         option.replace,
         option.isExtract,
