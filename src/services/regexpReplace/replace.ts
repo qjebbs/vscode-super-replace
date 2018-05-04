@@ -98,7 +98,7 @@ function getEdits(
                     let r = CalcReplace(conf.replaceConfig, m, dict);
                     return p + (r ? r + '\n' : "");
                 }, "").trim();
-                return p + '\n' + matches;
+                return p + (matches ? matches + '\n' : "");
             },
             ""
         ).trim();
