@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.2.0
+
+- Improvement: Dealing with multiple selections.
+- Improvement: Improved extract reulst.
+- Improvement: UI switch to webview.
+- Improvement: Auto detect operation range
+- Improvement: Some replace and extract logic optimizations.
+- Many code optimizations
+
 ## 0.1.1
 
 - Improvement: Improved extract reulst.
