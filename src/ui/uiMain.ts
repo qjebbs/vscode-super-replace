@@ -27,8 +27,16 @@ async function replace(option: ReplaceOption) {
         vscode.window.showInformationMessage("Find pattern cannot be empty!");
         return;
     }
-    let editors = vscode.window.visibleTextEditors;
-    let editor = editors[0];
+    let editor = vscode.window.visibleTextEditors.reduce(
+        (p, c) => {
+            return p || (c.document.uri.scheme != "output" ? c : undefined);
+        },
+        undefined
+    );
+    if (!editor) {
+        vscode.window.showInformationMessage("No active document found!");
+        return;
+    }
     let hasSelection = editor.selections.reduce((p, s) => {
         return p || !s.isEmpty;
     }, false);
