@@ -18,17 +18,28 @@ window.addEventListener("load", () => {
     textReplace = document.getElementById("textReplace");
     textFunc = document.getElementById("textFunc");
     // radRngSelection = document.getElementById("radRngSelection");
+    document.getElementById("doMatch").addEventListener("click", doMatch);
     document.getElementById("doReplace").addEventListener("click", doReplace);
     document.getElementById("doExtract").addEventListener("click", doExtract);
 });
+
+function doMatch() {
+    vscode.postMessage({
+        find: textFind.value,
+        replace: textReplace.value,
+        func: textFunc.value,
+        mode: 0,
+        // selectionOnly: radRngSelection.checked,
+    });
+}
 
 function doReplace() {
     vscode.postMessage({
         find: textFind.value,
         replace: textReplace.value,
         func: textFunc.value,
+        mode: 1,
         // selectionOnly: radRngSelection.checked,
-        isExtract: false
     });
 }
 
@@ -38,8 +49,8 @@ function doExtract() {
         find: textFind.value,
         replace: rep ? rep : "$0",
         func: textFunc.value,
+        mode: 2,
         // selectionOnly: radRngSelection.checked,
-        isExtract: true
     });
 }
 

@@ -1,6 +1,7 @@
 import { UI } from "./ui";
 import * as vscode from 'vscode';
 import { contextManager } from '../services/common/context';
+import { superMatch } from "../services/regexpReplace/match";
 import { superReplace } from "../services/regexpReplace/replace";
 import { superExtract } from "../services/regexpReplace/extract";
 
@@ -15,11 +16,17 @@ contextManager.addInitiatedListener(ctx => {
     );
 });
 
+enum OperMode {
+    Match = 0,
+    Replace,
+    Extract,
+}
+
 interface ReplaceOption {
     find: string,
     replace: string,
     func: string,
-    isExtract: boolean,
+    mode: OperMode,
 }
 
 async function replace(option: ReplaceOption) {
@@ -41,7 +48,14 @@ async function replace(option: ReplaceOption) {
         return p || !s.isEmpty;
     }, false);
 
-    let worker = option.isExtract ? superExtract : superReplace;
+    let worker = null;
+    if (option.mode === OperMode.Match){
+        worker = superMatch;
+    }else if (option.mode === OperMode.Replace) {
+        worker = superReplace;
+    }else if (option.mode ===  OperMode.Extract) {
+        worker = superExtract;
+    }
 
     await worker(
         editor,
