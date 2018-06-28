@@ -5,26 +5,7 @@ import { matcheWorker } from './worker';
 export async function superMatch(
     editor: vscode.TextEditor,
     scope: vscode.Range[] | vscode.TextDocument,
-    find: string,
-    replace: string,
-    processor: (strings: string[], ...args: string[]) => Promise<IProcessReulst>,
-    ...processorArgs: string[]
-);
-export async function superMatch(
-    editor: vscode.TextEditor,
-    scope: vscode.Range[] | vscode.TextDocument,
-    find: string,
-    replace: string,
-    func: string,
-    ...processorArgs: string[]
-);
-export async function superMatch(
-    editor: vscode.TextEditor,
-    scope: vscode.Range[] | vscode.TextDocument,
-    find: string,
-    replace: string,
-    func: any,
-    ...para: any[]
+    find: string
 ) {
-    await matcheWorker(editor, scope, find, replace);
+    await matcheWorker(editor, scope, find);
 }

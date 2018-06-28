@@ -58,8 +58,7 @@ export async function replaceWorker(
 export async function matcheWorker(
     editor: vscode.TextEditor,
     scope: vscode.Range[] | vscode.TextDocument,
-    find: string,
-    replace: string
+    find: string
 ) {
     try {
         if (!find || !scope) return;
@@ -68,12 +67,12 @@ export async function matcheWorker(
         let document = editor.document;
 
         let selections = [];
-        let confs = analysis(document, ranges, find, replace);
+        let confs = analysis(document, ranges, find, "");
         confs.forEach(function (conf) {
             conf.findConfig.collectedMatches.forEach(item => {
                 if (item.matches.length)
                     selections.push(
-                        ...item.matchesRange.map(
+                        ...item.matchRanges.map(
                             r => new vscode.Selection(r.start, r.end)
                         )
                     );

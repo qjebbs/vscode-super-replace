@@ -11,17 +11,17 @@ export function analysis(
 ): IAnalysisResult[] {
     return ranges.map(range => {
         if (range.isEmpty) return undefined;
-        let lineRanges: IRangeText[] = [];
+        let lines: IRangeText[] = [];
         for (let i = range.start.line; i <= range.end.line; i++) {
             let rng = document.lineAt(i).range.intersection(range);
             if (!rng) continue;
-            lineRanges.push(<IRangeText>{
+            lines.push(<IRangeText>{
                 text: document.getText(rng),
                 range: rng
             });
         }
         let replaceConfig = getReplaceConfig(replace);
-        let findConfig = getFindConfig(find, lineRanges, replaceConfig);
+        let findConfig = getFindConfig(find, lines, replaceConfig);
         if (!findConfig) return undefined;
         return <IAnalysisResult>{
             range: range,

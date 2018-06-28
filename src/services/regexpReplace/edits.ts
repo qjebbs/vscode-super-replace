@@ -20,7 +20,6 @@ export function getReplaceEdits(conf: IAnalysisResult, dict: IProcessedResultDic
     return conf.findConfig.collectedMatches.map((lineMatches, i) => {
         if (lineMatches.restSubStrings.length - lineMatches.matches.length !== 1)
             throw new Error("查找结果子串与匹配数量不合预期！");
-        let rng = lineMatches.range;
         let text = "";
         if (!lineMatches.matches.length) return undefined;
         text = lineMatches.matches.reduce((p, m, i) => {
@@ -28,7 +27,7 @@ export function getReplaceEdits(conf: IAnalysisResult, dict: IProcessedResultDic
             return p + rep + lineMatches.restSubStrings[i + 1];
         }, lineMatches.restSubStrings[0]);
         return <RangeReplace>{
-            range: rng,
+            range: lineMatches.sourceLine,
             replace: text,
         }
     }).filter(e => e !== undefined);

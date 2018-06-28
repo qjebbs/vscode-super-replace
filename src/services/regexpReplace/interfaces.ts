@@ -6,11 +6,11 @@ export interface IRangeText {
 }
 
 export interface IFindMatches {
-    range: vscode.Range;
+    sourceLine: vscode.Range;
     matches: RegExpExecArray[];
-    matchesRange: vscode.Range[];
+    matchRanges: vscode.Range[];
     restSubStrings: string[];
-    restSubStringsRange: vscode.Range[];
+    restSubStringRanges: vscode.Range[];
 }
 export interface IFindConfig {
     collectedMatches: IFindMatches[];
