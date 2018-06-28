@@ -71,14 +71,13 @@ export async function matcheWorker(
         let confs = analysis(document, ranges, find, replace);
         confs.forEach(function (conf) {
             conf.findConfig.collectedMatches.forEach(item => {
-                if (item.matches.length > 0) {
-                    let beginPosition = new vscode.Position(item.range.start.line, item.range.start.character);
-                    let endPosition = new vscode.Position(item.range.end.line, item.range.end.character);
+                if (item.matches.length)
                     selections.push(
-                        new vscode.Selection(beginPosition, endPosition)
+                        ...item.matchesRange.map(
+                            r => new vscode.Selection(r.start, r.end)
+                        )
                     );
-                }
-            })
+            });
         });
 
         editor = await vscode.window.showTextDocument(document);

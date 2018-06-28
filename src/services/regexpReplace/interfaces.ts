@@ -8,7 +8,9 @@ export interface IRangeText {
 export interface IFindMatches {
     range: vscode.Range;
     matches: RegExpExecArray[];
+    matchesRange: vscode.Range[];
     restSubStrings: string[];
+    restSubStringsRange: vscode.Range[];
 }
 export interface IFindConfig {
     collectedMatches: IFindMatches[];
