@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { IProcessReulst } from './interfaces';
 import { replaceWorker } from './worker';
+import { getExtractEdits } from './edits';
 
 export async function superExtract(
     editor: vscode.TextEditor,
@@ -24,7 +25,7 @@ export async function superExtract(
     find: string,
     replace: string,
     func: any,
-    ...para: any[],
+    ...para: any[]
 ) {
-    await replaceWorker(editor, scope, find, replace, true, func, ...para);
+    await replaceWorker(editor, scope, find, replace, getExtractEdits, func, ...para);
 }

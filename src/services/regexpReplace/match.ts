@@ -1,9 +1,8 @@
 import * as vscode from 'vscode';
 import { IProcessReulst } from './interfaces';
-import { replaceWorker } from './worker';
-import { getReplaceEdits } from './edits';
+import { matcheWorker } from './worker';
 
-export async function superReplace(
+export async function superMatch(
     editor: vscode.TextEditor,
     scope: vscode.Range[] | vscode.TextDocument,
     find: string,
@@ -11,7 +10,7 @@ export async function superReplace(
     processor: (strings: string[], ...args: string[]) => Promise<IProcessReulst>,
     ...processorArgs: string[]
 );
-export async function superReplace(
+export async function superMatch(
     editor: vscode.TextEditor,
     scope: vscode.Range[] | vscode.TextDocument,
     find: string,
@@ -19,7 +18,7 @@ export async function superReplace(
     func: string,
     ...processorArgs: string[]
 );
-export async function superReplace(
+export async function superMatch(
     editor: vscode.TextEditor,
     scope: vscode.Range[] | vscode.TextDocument,
     find: string,
@@ -27,5 +26,5 @@ export async function superReplace(
     func: any,
     ...para: any[]
 ) {
-    await replaceWorker(editor, scope, find, replace, getReplaceEdits, func, ...para);
+    await matcheWorker(editor, scope, find, replace);
 }
