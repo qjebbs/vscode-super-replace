@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.3.0
+
+- New Feature: add match action. Thanks to [tiansin](https://github.com/tiansin)
+
 ## 0.2.0
 
 - Improvement: Dealing with multiple selections.
