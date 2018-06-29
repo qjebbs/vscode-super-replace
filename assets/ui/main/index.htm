@@ -25,7 +25,7 @@
                 <div class="input-group">
                     <input type="text" class="form-control" id="textFind" name="textFind" required placeholder="Regular Expression of Find.">
                     <div class="input-group-append">
-                        <button id="doMatch" class="btn btn-outline-primary" type="button">Match</button>
+                        <button id="doMatch" class="btn btn-outline-secondary" type="button">Match</button>
                     </div>
                 </div>
             </div>
@@ -36,14 +36,14 @@
             <div class="form-group">
                 <label for="func">Processing Function</label>
                 <div class="dropdown">
-                    <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
+                    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown">
                         Built-In Functions &amp; Samples
                         <span class="caret"></span>
                     </button>
-                    <div class="dropdown-menu">
-                        <a href="#" class="dropdown-item" onclick="onListClick(this)" data="googleTranslate">Google Translate</a>
+                    <div id="function-templates" class="dropdown-menu">
+                        <a href="#" class="dropdown-item" data="googleTranslate">Google Translate</a>
                         <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item" onclick="onListClick(this)" data="uppercase">Sample: Convert to Upper Case</a>
+                        <a href="#" class="dropdown-item" data="uppercase">Sample: Convert to Upper Case</a>
                     </div>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                 <textarea class="form-control" id="textFunc" name="textFunc" required rows="10"></textarea>
             </div>
             <button type="button" class="btn btn-primary" id="doReplace">Replace</button>
-            <button type="button" class="btn btn-outline-primary" id="doExtract">Extract</button>
+            <button type="button" class="btn btn-outline-secondary" id="doExtract">Extract</button>
         </form>
     </div>
     <!-- The Modal -->
@@ -68,7 +68,7 @@
                 </div>
 
                 <!-- Modal body -->
-                <div class="modal-body small">
+                <div class="modal-body">
                     <h5>Sub Match</h5>
                     <p>
                         We know that, with regexp replace, we can use
