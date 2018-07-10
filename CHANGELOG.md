@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.3.1
+
+- Fix: Duplicate an editor after operation in VSC 1.25.0
+- Improvement: UI optimize.
+
 ## 0.3.0
 
 - New Feature: add match action. Thanks to [tiansin](https://github.com/tiansin)
