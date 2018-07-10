@@ -27,8 +27,7 @@ export interface RangeReplace {
     replace: string,
 }
 
-export async function editTextDocument(document: vscode.TextDocument, edits: RangeReplace[]) {
-    let editor = await vscode.window.showTextDocument(document);
+export async function editTextDocument(editor: vscode.TextEditor, edits: RangeReplace[]) {
     editor.edit(e => {
         edits.map(edit => {
             if (!edit || !edit.range || edit.replace === undefined) return;

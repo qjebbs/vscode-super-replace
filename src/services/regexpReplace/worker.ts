@@ -49,7 +49,7 @@ export async function replaceWorker(
             p.push(...(handle(c, dict)));
             return p;
         }, []);
-        editTextDocument(document, edits);
+        editTextDocument(editor, edits);
     } catch (error) {
         return Promise.reject(error);
     }
@@ -79,7 +79,6 @@ export async function matcheWorker(
             });
         });
 
-        editor = await vscode.window.showTextDocument(document);
         editor.selections = selections;
     } catch (error) {
         return Promise.reject(error);
