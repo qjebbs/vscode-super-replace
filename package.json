@@ -28,10 +28,17 @@
         "commands": [
             {
                 "command": "superReplace.replaceWindow",
-                "title": "Open Replace Window...",
-                "category": "Super Replace"
+                "title": "%superReplace.replaceWindow.title%"
             }
         ],
+        "menus": {
+            "editor/context": [
+                {
+                    "command": "superReplace.replaceWindow",
+                    "group": "edit"
+                }
+            ]
+        },
         "configuration": [
             {
                 "title": "Super Replace Configuration",
