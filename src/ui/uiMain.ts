@@ -11,7 +11,7 @@ contextManager.addInitiatedListener(ctx => {
     uiMain = new UI(
         "superReplace.main",
         "Super Replace",
-        ctx.asAbsolutePath("assets/ui/main/index.htm"),
+        ctx,
         replace,
     );
 });

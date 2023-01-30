@@ -2,23 +2,29 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import { showMessagePanel } from '../services/common/tools';
+
+
 export class UI extends vscode.Disposable {
     _panel: vscode.WebviewPanel;
     _viewType: string;
-    _base: string;
-    _file: string;
+    _staticBase: string;
+    _htmlPath: string;
     _title: string;
     _content: string;
+    _ctx: vscode.ExtensionContext;
     _disposables: vscode.Disposable[] = [];
     _listener: (e: any) => any = undefined;
 
-    constructor(viewType: string, title: string, file: string, listener: (e: any) => any) {
+    constructor(viewType: string, title: string, ctx:vscode.ExtensionContext, listener: (e: any) => any) {
         super(() => this.dispose());
+        this._ctx = ctx;
+
+        this._htmlPath = path.join(this._ctx.extensionPath, "assets/ui/main/index.htm");
         this._viewType = viewType;
         this._title = title;
-        this._base = path.dirname(file);
-        this._file = file;
-        this._listener = listener
+        this._staticBase = path.dirname(this._htmlPath);
+        this._listener = listener;
+
     }
 
     show(env?: any) {
@@ -45,7 +51,7 @@ export class UI extends vscode.Disposable {
             vscode.ViewColumn.Two, <vscode.WebviewOptions>{
                 enableScripts: true,
                 enableCommandUris: true,
-                localResourceRoots: [vscode.Uri.file(this._base)],
+                localResourceRoots: [vscode.Uri.file(this._staticBase)],
             }
         );
         this.addMessageListener();
@@ -70,20 +76,29 @@ export class UI extends vscode.Disposable {
         }
     }
     private loadFile(env: any) {
-        this._content = this.evalHtml(fs.readFileSync(this._file).toString(), env);
+        this._content = this.replaceResourcePath(fs.readFileSync(this._htmlPath).toString(), env);
     }
-    private evalHtml(html: string, envObj: any): string {
+
+    /**
+     * When loading local JS/CSS files, webview only can accessing them with the prescribed URL format.
+     * See https://code.visualstudio.com/api/extension-guides/webview#loading-local-content
+     */
+    private replaceResourcePath(html: string, envObj: any): string {
         let linkReg = /(src|href)\s*=\s*([`"'])(.+?)\2/ig;
-        let base: string = this._base;
+        let base: string = this._staticBase;
         let env = JSON.stringify(envObj);
-        let result: string = eval('`' + html + '`');
-        // convert relative "src", "href" paths to absolute
+
+        // let result: string = eval('`' + html + '`');
+        let result = html;
+
         return result.replace(linkReg, (match, ...subs) => {
             let uri = subs[2] as string;
             if (!path.isAbsolute(uri)) uri = path.join(base, uri);
             if (!fs.existsSync(uri)) return match;
-            uri = vscode.Uri.file(uri).with({ scheme: 'vscode-resource' }).toString();
-            return `${subs[0]}=${subs[1]}${uri}${subs[1]}`;
+            const onDiskPath = vscode.Uri.file(uri);
+            const secureSrc = this._panel.webview.asWebviewUri(onDiskPath);
+            const resourcePath = `${subs[0]}=${subs[1]}${secureSrc}${subs[1]}`;
+            return resourcePath;
         });
     }
     dispose() {
