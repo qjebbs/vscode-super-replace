@@ -15,7 +15,7 @@ export class UI extends vscode.Disposable {
     _disposables: vscode.Disposable[] = [];
     _listener: (e: any) => any = undefined;
 
-    constructor(viewType: string, title: string, ctx:vscode.ExtensionContext, listener: (e: any) => any) {
+    constructor(viewType: string, title: string, ctx: vscode.ExtensionContext, listener: (e: any) => any) {
         super(() => this.dispose());
         this._ctx = ctx;
 

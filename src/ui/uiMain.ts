@@ -49,11 +49,11 @@ async function replace(option: ReplaceOption) {
     }, false);
 
     let worker = null;
-    if (option.mode === OperMode.Match){
+    if (option.mode === OperMode.Match) {
         worker = superMatch;
-    }else if (option.mode === OperMode.Replace) {
+    } else if (option.mode === OperMode.Replace) {
         worker = superReplace;
-    }else if (option.mode ===  OperMode.Extract) {
+    } else if (option.mode === OperMode.Extract) {
         worker = superExtract;
     }
 
