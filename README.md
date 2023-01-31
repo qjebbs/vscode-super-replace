@@ -32,10 +32,7 @@ For example, find `\w+` replace `$$0` function `s=>s.toUpperCase()` will transfo
 
 ### Extract Tutorial
 
-Super replace provides another action called `Extract`.
-
-It's useful while extracting matched texts from mass texts. To simply understand it,
-we can take it as an action that remove all unmatched texts after replace.
+`Extract` action keeps only replaced texts in the document, it's useful for extracting content from mass texts.
 
 ## Requirements
 
