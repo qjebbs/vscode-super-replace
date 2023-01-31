@@ -39,13 +39,13 @@ we can take it as an action that remove all unmatched texts after replace.
 
 ## Requirements
 
-If you want to translate, you need a Google Cloud Translate API Key and configurate `superReplace.googleApiKey`. You can follow the [Atril Solutions step by step Guide](https://atrilsolutions.zendesk.com/hc/en-us/articles/205540421-How-to-obtain-a-Google-Translate-API-key) to create a key.
+If you want to translate, you need a Google Cloud Translate API Key file and configurate the path to `superReplace.googleApiKeyFile`. See [Google Could Translation Setup](https://cloud.google.com/translate/docs/setup) for more infomation.
 
 **Reference**: [Language Support by Google Translate](https://cloud.google.com/translate/docs/languages)
 
 ## Extension Settings
 
-`superReplace.googleApiKey`: The Google API key needed by the `gtranslate` function.
+`superReplace.googleApiKeyFile`: The Google API key needed by the `gtranslate` function.
 
 ## Known Issues
 

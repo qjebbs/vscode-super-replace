@@ -6,8 +6,8 @@ class Conifg extends ConfigReader {
         super('superReplace');
     }
     onChange() { }
-    get googleApiKey(): string {
-        return this.read<string>("googleApiKey");
+    get googleApiKeyFile(): string {
+        return this.read<string>("googleApiKeyFile");
     }
 
 }

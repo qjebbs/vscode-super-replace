@@ -2,8 +2,9 @@
     let templates = {
         "googleTranslate": [
             '// gtranslate returns a function that translates the match text.',
-            '// change the "en" and "zh-cn" to whatever languages you want',
-            '// don\'t forget to configurate "superReplace.googleApiKey"',
+            '// change the "en" and "zh-cn" to whatever languages you want.',
+            '// don\'t forget to configurate "superReplace.googleApiKeyFile".',
+            '// see also: https://cloud.google.com/translate/docs/setup',
             'gtranslate("en","zh-cn")',
         ],
         "uppercase": ["s=>s.toUpperCase()"]

@@ -1,64 +1,73 @@
-import * as gt from "google-translate";
+import * as gt from "@google-cloud/translate";
 import { ITranslator, ITranslation, IDetectLanguageResult, ITranslateError } from "./interface";
 import { config } from "../common/config";
 
 class googleTranslator implements ITranslator {
-    get translator() {
-        return gt(config.googleApiKey);
+    private translator: gt.v3.TranslationServiceClient;
+    private parent: string;
+    constructor() {
+        this.translator = new gt.v3.TranslationServiceClient({
+            keyFile: config.googleApiKeyFile,
+        });
     }
-    async translate(strings: string | string[], target: string, source?: string): Promise<ITranslation> {
+    async translate(contents: string | string[], target: string, source?: string): Promise<ITranslation> {
+        let contentArr: string[] = contents instanceof Array ? contents : [contents];
         let detec: IDetectLanguageResult;
         if (!source) {
-            detec = await this.detectLanguage(strings[0]);
+            detec = await this.detectLanguage(contents[0]);
             if (detec.error) return Promise.resolve(<ITranslation>{
                 error: detec.error,
                 translations: undefined,
             });
             source = detec.detections[0];
         }
+        if (!this.parent) {
+            let project = await this.translator.getProjectId();
+            this.parent = `projects/${project}`;
+        }
         return new Promise<ITranslation>((resolve, reject) => {
-            this.translator.translate(strings, source, target, (err, translation) => {
-                let translations: string[] = undefined;
-                if (translation)
-                    translations = (translation instanceof Array ? translation : [translation]).map(t => t.translatedText)
+            this.translator.translateText({
+                contents: contentArr,
+                mimeType: "text/plain",
+                sourceLanguageCode: source,
+                targetLanguageCode: target,
+                parent: this.parent,
+            }).then(responses => {
+                let translations = responses[0].translations;
+                if (translations && translations.length) {
+                    resolve(<ITranslation>{
+                        error: undefined,
+                        translations: translations.map(t => t.translatedText),
+                    });
+                }
+            }).catch(err => {
                 resolve(<ITranslation>{
-                    error: this.parseError(err),
-                    translations: translations,
+                    error: err,
+                    translations: undefined,
                 });
             });
         });
     }
-    detectLanguage(strings: string | string[]): Promise<IDetectLanguageResult> {
+    detectLanguage(contents: string | string[]): Promise<IDetectLanguageResult> {
+        let contentArr: string[] = contents instanceof Array ? contents : [contents];
         return new Promise<IDetectLanguageResult>((resolve, reject) => {
-            this.translator.detectLanguage(strings, (err, detections) => {
+            this.translator.detectLanguage({
+                content: contentArr.join(" "),
+            }).then(responses => {
+                let detections = responses[0].languages;
+                if (detections && detections.length) {
+                    resolve(<IDetectLanguageResult>{
+                        error: undefined,
+                        detections: detections.map(d => d.languageCode),
+                    });
+                }
+            }).catch(err => {
                 resolve(<IDetectLanguageResult>{
-                    error: this.parseError(err),
-                    detections: (detections instanceof Array ? detections : [detections]).map(d => d.language),
+                    error: err,
+                    detections: undefined,
                 });
             });
         });
-    }
-    private parseError(err: any): ITranslateError {
-        if (!err) return undefined;
-        let e;
-        if (err.body) {
-            let tmp = JSON.parse(err.body);
-            e = {
-                code: tmp.error.code,
-                message: tmp.error.message
-            }
-        } else if (err.error) {
-            e = err.error;
-        } else {
-            e = {
-                code: "0",
-                message: "Unknow Error."
-            }
-        }
-        return <ITranslateError>{
-            code: e.code,
-            message: e.message,
-        }
     }
 }
 

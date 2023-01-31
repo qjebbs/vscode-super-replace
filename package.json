@@ -43,10 +43,10 @@
             {
                 "title": "Super Replace Configuration",
                 "properties": {
-                    "superReplace.googleApiKey": {
+                    "superReplace.googleApiKeyFile": {
                         "type": "string",
                         "default": "",
-                        "description": "The Google API key needed by the gtranslate function",
+                        "description": "The Google API key file needed by the gtranslate function",
                         "scope": "window"
                     }
                 }
@@ -67,6 +67,6 @@
         "typescript": "^4.9.4"
     },
     "dependencies": {
-        "google-translate": "^2.1.0"
+        "@google-cloud/translate": "^7.1.0"
     }
 }
