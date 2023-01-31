@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.4.0
+
+- Adopt google cloud translation v3
+- Fix: Loading local resource failure under WSL2, **@csgka1**, [#10](https://github.com/qjebbs/vscode-super-replace/pull/10)
+
+> Note: `superReplace.googleApiKeyFile` has replaced the old `superReplace.googleApiKey` setting, since google cloud translation v3 no longer accepts api keys.
+
 ## 0.3.1
 
 - Fix: Duplicate an editor after operation in VSC 1.25.0
